@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid" id="head">
+        <a class="navbar-brand" routerLink="/" style="color:white">Picz</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item" *ngIf="isAuth">
+                    <a class="nav-link active" aria-current="page" routerLink="/create" style="color:white">New Post</a>
+                </li>
+                <li class="nav-item" *ngIf="!isAuth">
+                    <a class="nav-link active" aria-current="page" routerLink="/login" style="color:white">Login</a>
+                </li>
+                <li class="nav-item" *ngIf="!isAuth">
+                    <a class="nav-link active" aria-current="page" routerLink="/signup" style="color:white">Sign Up</a>
+                </li>
+                <li class="nav-item" *ngIf="isAuth">
+                    <a class="nav-link active" aria-current="page" (click)="logout()"
+                        style="color:white; cursor: pointer;">Log Out</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>

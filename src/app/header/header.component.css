@@ -1,0 +1,12 @@
+nav {
+    background-color: rgb(54, 158, 249);
+    padding: 8px;
+    text-align: left;
+    display: flex;
+}
+
+/* .active {
+    background-color: rgb(150, 205, 254);
+    border-radius: 12px;
+    padding: 5px;
+} */

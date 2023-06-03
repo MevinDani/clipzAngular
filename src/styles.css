@@ -1,1 +1,18 @@
+
+@import 'ngx-toastr/toastr';
+
 /* You can add global styles to this file, and also import other style files */
+* {
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(213, 255, 241);
+}
+
+/* nav {
+    background-color: rgb(54, 158, 249);
+    color: white;
+} */
