@@ -54,3 +54,29 @@
 .uname:hover {
     background-color: coral;
 }
+
+.follow {
+    background-color: aquamarine;
+    padding: 2px;
+    border-radius: 5px;
+    font-size: smaller;
+    margin-left: 5px;
+}
+
+.follow:hover {
+    background-color: rgb(0, 255, 170);
+    cursor: pointer;
+}
+
+.unfollow {
+    background-color: rgb(253, 255, 123);
+    padding: 2px;
+    border-radius: 5px;
+    font-size: smaller;
+    margin-left: 5px;
+}
+
+.unfollow:hover {
+    background-color: rgb(251, 255, 32);
+    cursor: pointer;
+}

@@ -26,7 +26,7 @@ router.get('/profile/:name', (req, res) => {
         res.status(200).json(result)
     }).catch(err => {
         res.status(403).json({
-            message: 'User donot exists',
+            message: 'Username donot exists',
         })
     })
 })
@@ -36,6 +36,26 @@ router.get('/:id', (req, res) => {
         res.status(200).json(result)
     }).catch(err => {
         res.status(403).json({
+            message: 'UserId donot exists'
+        })
+    })
+})
+
+router.put('/follow/:id', (req, res) => {
+    logic.followUser(req.params.id, req.body.id).then(result => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(403).json({
+            message: 'UserId (follow) donot exists'
+        })
+    })
+})
+
+router.get('/followersList/:id', (req, res) => {
+    logic.followerList(req.params.id).then(result => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(401).json({
             message: 'UserId donot exists'
         })
     })

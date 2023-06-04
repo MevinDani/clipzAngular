@@ -48,21 +48,26 @@ login = async (username, password) => {
 }
 
 getUser = async (id) => {
+    console.log(id);
     const user = await User.findOne({ _id: id })
+    console.log(user);
     if (user) {
         const { password, ...other } = user._doc
+        console.log(other);
         return {
             other
         }
     } else {
         return {
-            message: 'User donot exists'
+            message: 'UserId donot exists'
         }
     }
 }
 
 getUserN = async (name) => {
+    console.log(name);
     const user = await User.findOne({ username: name })
+    console.log(user);
     if (user) {
         const { password, ...other } = user._doc
         return {
@@ -70,7 +75,7 @@ getUserN = async (name) => {
         }
     } else {
         return {
-            message: 'User donot exists'
+            message: 'UserName donot exists'
         }
     }
 }
@@ -86,4 +91,42 @@ getProfPost = async (name) => {
     }
 }
 
-module.exports = { register, login, getUser, getUserN, getProfPost }
+followUser = async (reqId, putId) => {
+    // console.log(reqId, putId);
+    if (reqId !== putId) {
+        const logUser = await User.findOne({ _id: putId })
+        const toFollowUser = await User.findOne({ _id: reqId })
+        // console.log(logUser, toFollowUser);
+        if (!toFollowUser.followers.includes(putId)) {
+            await toFollowUser.updateOne({ $push: { followers: putId } })
+            await logUser.updateOne({ $push: { followings: reqId } })
+            return {
+                message: 'User has been followed'
+            }
+        } else {
+            return {
+                message: 'You already follow this user'
+            }
+        }
+    } else {
+        return {
+            message: 'You cant follow yourself'
+        }
+    }
+}
+
+followerList = async (id) => {
+    const user = await User.findOne({ _id: id })
+    // console.log(user);
+    if (user) {
+        const { followings } = user._doc
+        // console.log([other]);
+        return followings
+    } else {
+        return {
+            message: 'follower error'
+        }
+    }
+}
+
+module.exports = { register, login, getUser, getUserN, getProfPost, followUser, followerList }

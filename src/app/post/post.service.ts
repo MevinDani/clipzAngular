@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnInit } from "@angular/core";
 import { Post } from "./post.model";
 import { Subject, map } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -12,11 +12,16 @@ const options = {
 }
 
 @Injectable({providedIn:'root'})
-export class PostService {
+export class PostService implements OnInit {
     private posts:Post[] = []
     private postUpdated = new Subject<Post[]>()
+    logUserId:any
 
     constructor(private http:HttpClient,private router:Router,private toastr:ToastrService) {}
+
+    ngOnInit(): void {
+        this.logUserId = JSON.parse(localStorage.getItem("uid") || "")
+    }
 
      // token header
     tokenHead() {
@@ -123,7 +128,22 @@ export class PostService {
             })
     }
 
+    apifollowUser(id:any) {
+        const logUserId = JSON.parse(localStorage.getItem("uid") || "")
+        const body = {
+            id:logUserId
+        }
+        this.http.put('http://localhost:2000/api/users/follow/'+id, body).subscribe((result:any) => {
+            if(result.message == 'User has been followed') {
+                this.toastr.success('User has been followed')
+            } else {
+                this.toastr.error('Some error occured')
+            }
+        })
+    }
 
-
+    getFollowersList(id:any) {
+        return this.http.get('http://localhost:2000/api/users/followersList/'+id)
+    }
 
 }

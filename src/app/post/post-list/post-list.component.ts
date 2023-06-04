@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
 import { Subscription } from 'rxjs';
+import { DataService } from 'src/app/data.service';
 
 @Component({
   selector: 'app-post-list',
@@ -9,11 +10,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit,OnDestroy {
-  constructor(public ps:PostService) {}
+  constructor(private ps:PostService, private ds:DataService) {}
   isLoading = false
   isAuth:any
   isAllowed:any
   locUserId:any
+  followArr:any = []
   // post = [
   //   {no:1,title:'First Post', content:'this is first post'},
   //   {no:2,title:'second Post', content:'this is second post'},
@@ -28,7 +30,9 @@ export class PostListComponent implements OnInit,OnDestroy {
     this.postSub =  this.ps.getUpdatedPostListener()
     .subscribe((posts:Post[]) => {
       this.isLoading = false
-      this.posts = posts      
+      this.posts = posts  
+      console.log(posts);
+          
     })
 
     if(localStorage.getItem('token')) {
@@ -37,6 +41,18 @@ export class PostListComponent implements OnInit,OnDestroy {
       this.isAuth = false
     }
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
+
+    // this.ds.getProfile(this.locUserId).subscribe((result:any) => {
+    //   console.log(this.locUserId);
+    //   console.log(result);
+    // })
+
+    this.ps.getFollowersList(this.locUserId).subscribe((result:any) => {
+      // console.log(result);
+      this.followArr = result
+      console.log(this.followArr);
+      
+    })
   }
 
   deletePost(postId:any) {
@@ -45,6 +61,14 @@ export class PostListComponent implements OnInit,OnDestroy {
 
   creatorId(id: any) {
     console.log(id);
+  }
+
+  followUser(id:any) {
+    this.ps.apifollowUser(id)
+  }
+
+  followerCheck() {
+    
   }
 
 

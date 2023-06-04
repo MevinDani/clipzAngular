@@ -122,10 +122,10 @@ router.put('/:id', tokenMiddle, upload.single('image'), (req, res) => {
         })
         Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
             if (result.modifiedCount > 0) {
-                console.log(result);
+                // console.log(result);
                 res.status(200).json({ message: 'Post Updated successfull' })
             } else {
-                console.log(Error);
+                // console.log(Error);
                 res.status(401).json({ message: 'Unauthorized user' })
             }
         }).catch((err) => {
