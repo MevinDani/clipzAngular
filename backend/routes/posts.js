@@ -31,7 +31,7 @@ const upload = require('../middleware/multer')
 
 // all posts
 router.get('', (req, res) => {
-    Post.find()
+    Post.find().sort({ _id: -1 }).limit(100)
         .then((documents) => {
             res.status(200).json({
                 message: 'Post fetched successfully',
@@ -59,12 +59,13 @@ router.post('', tokenMiddle, upload.single('image'), async (req, res) => {
         //     data: result
         // })
         const user = await logic.getUser(req.userToken.userId)
+        // console.log(user);
         const post = new Post({
             title: req.body.title,
             content: req.body.content,
             imagePath: result.url,
             creator: req.userToken.userId,
-            name: user.other.username
+            name: user.username
         })
         post.save().then((createdPostId) => {
             res.status(201).json({
@@ -85,7 +86,7 @@ router.post('', tokenMiddle, upload.single('image'), async (req, res) => {
 
 // update post
 router.put('/:id', tokenMiddle, upload.single('image'), (req, res) => {
-    console.log(req)
+    // console.log(req)
     if (req.file) {
         cloudinary.uploader.upload(req.file.path, async (err, result) => {
             if (err) {
@@ -103,7 +104,7 @@ router.put('/:id', tokenMiddle, upload.single('image'), (req, res) => {
             })
             Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
                 if (result.modifiedCount > 0) {
-                    console.log(result);
+                    // console.log(result);
                     res.status(200).json({ message: 'Post Updated successfull' })
                 } else {
                     console.log(Error);
@@ -163,8 +164,8 @@ router.delete('/:id', tokenMiddle, (req, res) => {
 })
 
 // get profile posts
-router.get('/profile/:name', (req, res) => {
-    logic.getProfPost(req.params.name).then(result => {
+router.get('/profile/:id', (req, res) => {
+    logic.getProfPost(req.params.id).then(result => {
         // console.log(result);
         res.status(200).json(result)
     }).catch(err => {

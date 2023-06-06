@@ -48,15 +48,13 @@ login = async (username, password) => {
 }
 
 getUser = async (id) => {
-    console.log(id);
+    // console.log(id);
     const user = await User.findOne({ _id: id })
-    console.log(user);
+    // console.log(user);
     if (user) {
         const { password, ...other } = user._doc
-        console.log(other);
-        return {
-            other
-        }
+        // console.log(other);
+        return other
     } else {
         return {
             message: 'UserId donot exists'
@@ -65,9 +63,9 @@ getUser = async (id) => {
 }
 
 getUserN = async (name) => {
-    console.log(name);
+    // console.log(name);
     const user = await User.findOne({ username: name })
-    console.log(user);
+    // console.log(user);
     if (user) {
         const { password, ...other } = user._doc
         return {
@@ -80,8 +78,8 @@ getUserN = async (name) => {
     }
 }
 
-getProfPost = async (name) => {
-    const post = await Post.find({ name })
+getProfPost = async (id) => {
+    const post = await Post.find({ creator: id }).sort({ _id: -1 }).limit(100)
     if (post) {
         return post
     } else {
@@ -96,16 +94,43 @@ followUser = async (reqId, putId) => {
     if (reqId !== putId) {
         const logUser = await User.findOne({ _id: putId })
         const toFollowUser = await User.findOne({ _id: reqId })
-        // console.log(logUser, toFollowUser);
+        // console.log(logUser, toFollowUser.username);
         if (!toFollowUser.followers.includes(putId)) {
             await toFollowUser.updateOne({ $push: { followers: putId } })
+            await toFollowUser.updateOne({ $push: { followersName: logUser.username } })
             await logUser.updateOne({ $push: { followings: reqId } })
+            await logUser.updateOne({ $push: { followingsName: toFollowUser.username } })
             return {
                 message: 'User has been followed'
             }
         } else {
             return {
                 message: 'You already follow this user'
+            }
+        }
+    } else {
+        return {
+            message: 'You cant follow yourself'
+        }
+    }
+}
+
+unfollowUser = async (reqId, putId) => {
+    if (reqId !== putId) {
+        const logUser = await User.findOne({ _id: putId })
+        const unFollowUser = await User.findOne({ _id: reqId })
+        // console.log(logUser, toFollowUser);
+        if (unFollowUser.followers.includes(putId)) {
+            await unFollowUser.updateOne({ $pull: { followers: putId } })
+            await unFollowUser.updateOne({ $pull: { followersName: logUser.username } })
+            await logUser.updateOne({ $pull: { followings: reqId } })
+            await logUser.updateOne({ $pull: { followingsName: unFollowUser.username } })
+            return {
+                message: 'User has been unfollowed'
+            }
+        } else {
+            return {
+                message: 'You dont follow this user'
             }
         }
     } else {
@@ -129,4 +154,4 @@ followerList = async (id) => {
     }
 }
 
-module.exports = { register, login, getUser, getUserN, getProfPost, followUser, followerList }
+module.exports = { register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }

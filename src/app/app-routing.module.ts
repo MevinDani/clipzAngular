@@ -13,7 +13,7 @@ const routes: Routes = [
   { path:'edit/:postId', component:PostCreateComponent,canActivate:[AuthGuard]},
   { path:'login', component:LoginComponent},
   { path:'signup', component:SignupComponent},
-  { path:'profile/user/:name', component:ProfileComponent}
+  { path:'profile/user/:id/:name', component:ProfileComponent}
 ];
 
 @NgModule({

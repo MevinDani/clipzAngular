@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit,DoCheck {
   ngDoCheck(): void {
     if(localStorage.getItem('token')) {
       this.isAuth = true
+      // console.log(true);
     } else {
       this.isAuth = false
     }

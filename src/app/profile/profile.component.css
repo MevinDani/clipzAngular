@@ -1,3 +1,14 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.sidebar {
+    width: 25%;
+    margin-right: 30px;
+}
+
 .accordion-item {
     width: 100%;
 }
@@ -59,6 +70,14 @@
     /* cursor: pointer; */
     font-size: 15px;
     font-weight: bold;
+}
+
+.followup {
+    color: red
+}
+
+.unfollow {
+    color: green
 }
 
 /* .uname:hover {

@@ -9,10 +9,10 @@
 <div class="container" *ngFor="let p of posts">
     <div *ngIf="!isLoading">
         <div>
-            <span class="uname" [routerLink]="['/profile/user',p.name]">{{p.name}}</span>
+            <span class="uname" [routerLink]="['/profile/user',p.creator,p.name]">{{p.name}}</span>
             <!-- <span *ngFor="let u of followArr"> -->
-            <span *ngIf="isAuth && (p.creator !== locUserId)" class="follow"
-                (click)="followUser(p.creator)">Follow</span>
+            <!-- <span *ngIf="isAuth && (p.creator !== locUserId)" class="follow"
+                (click)="followUser(p.creator)">Follow</span> -->
             <!-- <span *ngIf="isAuth && (p.creator !== locUserId)" class="unfollow"
                 (click)="followUser(p.creator)">UnFollow</span> -->
             <!-- </span> -->

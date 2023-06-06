@@ -16,6 +16,7 @@ export class PostListComponent implements OnInit,OnDestroy {
   isAllowed:any
   locUserId:any
   followArr:any = []
+  postCreators:any = []
   // post = [
   //   {no:1,title:'First Post', content:'this is first post'},
   //   {no:2,title:'second Post', content:'this is second post'},
@@ -31,7 +32,7 @@ export class PostListComponent implements OnInit,OnDestroy {
     .subscribe((posts:Post[]) => {
       this.isLoading = false
       this.posts = posts  
-      console.log(posts);
+      // console.log(posts);
           
     })
 
@@ -50,9 +51,10 @@ export class PostListComponent implements OnInit,OnDestroy {
     this.ps.getFollowersList(this.locUserId).subscribe((result:any) => {
       // console.log(result);
       this.followArr = result
-      console.log(this.followArr);
+      // console.log(this.followArr);
       
     })
+
   }
 
   deletePost(postId:any) {
@@ -60,15 +62,11 @@ export class PostListComponent implements OnInit,OnDestroy {
   }
 
   creatorId(id: any) {
-    console.log(id);
+    // console.log(id);
   }
 
   followUser(id:any) {
     this.ps.apifollowUser(id)
-  }
-
-  followerCheck() {
-    
   }
 
 
@@ -76,6 +74,12 @@ export class PostListComponent implements OnInit,OnDestroy {
     this.postSub.unsubscribe()
   }
 
-
+  // followerCheck() {
+  //   for(let i of this.posts) {
+  //     if(this.locUserId == i.creator) {
+  //       console.log(i.creator,'hit');
+  //     }
+  //   }
+  // }
 
 }

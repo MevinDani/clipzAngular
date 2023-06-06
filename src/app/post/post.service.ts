@@ -137,7 +137,23 @@ export class PostService implements OnInit {
             if(result.message == 'User has been followed') {
                 this.toastr.success('User has been followed')
             } else {
-                this.toastr.error('Some error occured')
+                this.toastr.error(result.message)
+            }
+        })
+    }
+
+    apiunfollowUser(id:any) {
+        const logUserId = JSON.parse(localStorage.getItem("uid") || "")
+        const body = {
+            id:logUserId
+        }
+        this.http.put('http://localhost:2000/api/users/unfollow/'+id, body).subscribe((result:any) => {
+            if(result.message == 'User has been unfollowed') {
+                this.toastr.warning('Unfollowed the User')
+            } else {
+                this.toastr.error(result.message)
+                console.log(result);
+                
             }
         })
     }

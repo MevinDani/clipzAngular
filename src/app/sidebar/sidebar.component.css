@@ -1,0 +1,12 @@
+.uname {
+    background-color: rgb(255, 164, 131);
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.uname:hover {
+    background-color: coral;
+}

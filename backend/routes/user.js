@@ -51,11 +51,32 @@ router.put('/follow/:id', (req, res) => {
     })
 })
 
+router.put('/unfollow/:id', (req, res) => {
+    logic.unfollowUser(req.params.id, req.body.id).then(result => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(403).json({
+            message: 'UserId (follow) donot exists'
+        })
+    })
+
+})
+
 router.get('/followersList/:id', (req, res) => {
     logic.followerList(req.params.id).then(result => {
         res.status(200).json(result)
     }).catch(err => {
         res.status(401).json({
+            message: 'UserId donot exists'
+        })
+    })
+})
+
+router.get('/idtoName/:id', (req, res) => {
+    logic.getUser(req.params.id).then(result => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(403).json({
             message: 'UserId donot exists'
         })
     })
