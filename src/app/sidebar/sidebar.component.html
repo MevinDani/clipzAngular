@@ -1,11 +1,25 @@
-<div class="mt-5">
+<!-- <div class="mt-5">
     <ul *ngFor="let f of followers" class="list-group">
-        <li class="list-group-item">{{f}}</li>
+        <li class="list-group-item"></li>
+    </ul>
+</div> -->
+
+<div class="card mt-5">
+    <div class="fhead">Followers</div>
+    <ul *ngFor="let f of followers" class="list-group list-group-flush">
+        <li (click)="userProf(f)" class=" list-group-item">{{f}}</li>
     </ul>
 </div>
 
-<div class="mt-5">
+<div *ngIf="locUserId == userId" class="card mt-5">
+    <div class="fhead">Followings</div>
+    <ul *ngFor="let g of followings" class="list-group list-group-flush">
+        <li (click)="userProf(g)" class=" list-group-item">{{g}}</li>
+    </ul>
+</div>
+
+<!-- <div class="mt-5">
     <ul *ngFor="let g of followings" class="list-group">
         <li class="list-group-item">{{g}}</li>
     </ul>
-</div>
+</div> -->

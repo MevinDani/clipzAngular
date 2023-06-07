@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, OnChanges, SimpleChanges, AfterViewChecked, AfterContentInit, AfterContentChecked} from '@angular/core';
+import { Component, OnInit, DoCheck, OnChanges, SimpleChanges, AfterViewChecked, AfterContentInit, AfterContentChecked, EventEmitter} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { PostService } from '../post/post.service';
@@ -26,8 +26,13 @@ export class ProfileComponent implements OnInit {
   private followSub!: Subscription;
   private creatorSub!:Subscription
 
+  followStatusChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  followId:any
+  unfollowId:any
+
   constructor(private route:ActivatedRoute,private ds:DataService,private ps:PostService,private router:Router) {}
-  
+
   ngOnInit(): void {
     this.userId = this.route.snapshot.params['id']
     this.userName = this.route.snapshot.params['name']
@@ -93,9 +98,15 @@ export class ProfileComponent implements OnInit {
   followUser(id:any) {
     // console.log(id);
     this.ps.apifollowUser(id)
+    // this.followId = id
+    // console.log(this.followId);
+    // console.log(typeof(this.followId));
+
+    // this.ds.apifollowUser(id)
     // console.log(this.followArr);
     // window.location.reload()
     this.followCheck = true
+    this.followStatusChange.emit(true)
     // this.followClick = !this.followClick
     // this.ngOnInit()
   }
@@ -103,9 +114,15 @@ export class ProfileComponent implements OnInit {
   unfollowUser(id:any) {
     // console.log(id);  
     this.ps.apiunfollowUser(id)
+    // this.unfollowId = id
+    // console.log(this.unfollowId);
+    // console.log(typeof(this.unfollowId));
+
+    // this.ds.apiunfollowUser(id)
     // console.log(this.followArr);
     // window.location.reload()
     this.followCheck = false
+    this.followStatusChange.emit(false)
     // const index = this.followArr.indexOf(id)
     // console.log(index);
     // this.followArr = this.followArr.splice(index,1)
@@ -120,9 +137,9 @@ export class ProfileComponent implements OnInit {
     this.userPost = this.userPost.filter((post:any) => post._id !== postId)
   }
 
-  // ngOnDestroy(): void {
-  //   this.followSub.unsubscribe()
-  //   this.creatorSub.unsubscribe()
-  // }
+  ngOnDestroy(): void {
+    this.followSub.unsubscribe()
+    // this.creatorSub.unsubscribe()
+  }
 
 }

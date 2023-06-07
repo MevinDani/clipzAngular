@@ -9,7 +9,7 @@ import { DataService } from 'src/app/data.service';
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css']
 })
-export class PostListComponent implements OnInit,OnDestroy {
+export class PostListComponent implements OnInit {
   constructor(private ps:PostService, private ds:DataService) {}
   isLoading = false
   isAuth:any
@@ -17,15 +17,15 @@ export class PostListComponent implements OnInit,OnDestroy {
   locUserId:any
   followArr:any = []
   postCreators:any = []
-  // post = [
-  //   {no:1,title:'First Post', content:'this is first post'},
-  //   {no:2,title:'second Post', content:'this is second post'},
-  //   {no:3,title:'third Post', content:'this is third post'}
-  // ]
+
+  userName:any
+
   posts:Post[] = []
   private postSub!: Subscription;
 
   ngOnInit(): void {
+    this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
+
     this.isLoading = true
     this.ps.getPosts()
     this.postSub =  this.ps.getUpdatedPostListener()
@@ -41,12 +41,14 @@ export class PostListComponent implements OnInit,OnDestroy {
     } else {
       this.isAuth = false
     }
-    this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
 
-    // this.ds.getProfile(this.locUserId).subscribe((result:any) => {
-    //   console.log(this.locUserId);
-    //   console.log(result);
-    // })
+    // console.log(this.locUserId);
+    
+    this.ds.getUser(this.locUserId).subscribe((result:any) => {
+      // console.log(this.locUserId);
+      // console.log(result);
+      this.userName = result.username
+    })
 
     this.ps.getFollowersList(this.locUserId).subscribe((result:any) => {
       // console.log(result);
@@ -70,9 +72,9 @@ export class PostListComponent implements OnInit,OnDestroy {
   }
 
 
-  ngOnDestroy(): void {
-    this.postSub.unsubscribe()
-  }
+  // ngOnDestroy(): void {
+  //   this.postSub.unsubscribe()
+  // }
 
   // followerCheck() {
   //   for(let i of this.posts) {

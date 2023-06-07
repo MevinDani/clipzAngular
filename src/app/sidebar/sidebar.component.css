@@ -1,12 +1,26 @@
-.uname {
+/* .uname {
     background-color: rgb(255, 164, 131);
-    border-radius: 10px;
-    padding: 5px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
+    width: min-content;
 }
 
 .uname:hover {
     background-color: coral;
+} */
+
+.fhead {
+    font-size: 16px;
+    padding: 8px;
+    text-align: center;
+    color: coral;
+}
+
+.card {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+li:hover {
+    cursor: pointer;
+    color: rgb(255, 68, 0);
 }

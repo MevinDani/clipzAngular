@@ -14,6 +14,12 @@ export class DataService implements OnInit {
   private creator:any
   private creatorIdUpd = new Subject()
 
+  private sidefollowArr:any = []
+  private sideFollowUpd = new Subject()
+
+  private sidefollowingArr:any = []
+  private sidefollowingUpd = new Subject()
+
   constructor(private http:HttpClient,private router:Router,private toastr:ToastrService) { }
   
   ngOnInit(): void {
@@ -49,11 +55,67 @@ export class DataService implements OnInit {
     return this.http.get('http://localhost:2000/api/users/idtoName/'+id)
   }
 
+  getUpdatedSideFollowArrListener() {
+    return this.sideFollowUpd.asObservable()
+  }
+
+  getUpdatedSideFollowinArrListener() {
+    return this.sidefollowingUpd.asObservable()
+  }
+
+  getSideFs(id:any) {
+    this.http.get('http://localhost:2000/api/users/idtoName/'+id)
+      .subscribe((result:any) => {
+        // console.log(result)
+        this.sidefollowArr = result.followers
+        this.sideFollowUpd.next([...this.sidefollowArr])
+        this.sidefollowingArr = result.followings
+        this.sidefollowingUpd.next([...this.sidefollowingArr])
+      })
+  }
+
   getFollowersList(id:any) {
     this.http.get('http://localhost:2000/api/users/followersList/'+id).subscribe((result:any) => {
+      // console.log(result);
       this.followArr = result
       this.followArrUpd.next([...this.followArr])
     })
   }
+
+  apifollowUser(id:any) {
+    const logUserId = JSON.parse(localStorage.getItem("uid") || "")
+    const body = {
+        id:logUserId
+    }
+    this.http.put('http://localhost:2000/api/users/follow/'+id, body).subscribe((result:any) => {
+        if(result.message == 'User has been followed') {
+            this.followArr.push(id)
+            this.followArrUpd.next([...this.followArr])
+            this.toastr.success('User has been followed')
+        } else {
+            this.toastr.error(result.message)
+        }
+    })
+  }
+
+  apiunfollowUser(id:any) {
+    const logUserId = JSON.parse(localStorage.getItem("uid") || "")
+    const body = {
+        id:logUserId
+    }
+    this.http.put('http://localhost:2000/api/users/unfollow/'+id, body).subscribe((result:any) => {
+        if(result.message == 'User has been unfollowed') {
+            const updatedFollowArr = this.followArr.filter((fid:any) => fid.id !== id)
+            this.followArr = updatedFollowArr
+            this.followArrUpd.next([...this.followArr])
+            this.toastr.warning('Unfollowed the User')
+        } else {
+            this.toastr.error(result.message)
+            console.log(result);
+            
+        }
+    })
+  }
+
 
 }

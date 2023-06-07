@@ -6,6 +6,24 @@
         <span class="visually-hidden">Loading...</span>
     </div>
 </div>
+
+<div class="container mt-5 prof-cont">
+    <div class="card">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h5 class="card-title text-center">Welcome, {{userName}}</h5>
+            <div class="prof-btns">
+                <button [routerLink]="['/profile/user',locUserId,userName]" class="btn btn-primary">
+                    View Profile
+                </button>
+                <button [routerLink]="'/create'" class="btn btn-success">
+                    Add Post
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container" *ngFor="let p of posts">
     <div *ngIf="!isLoading">
         <div>

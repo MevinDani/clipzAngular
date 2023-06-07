@@ -27,6 +27,21 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
+.card {
+    border: none;
+    background-color: rgb(255, 174, 144);
+}
+
+.prof-cont {
+    background-color: rgb(255, 174, 144);
+}
+
+.prof-btns {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+}
+
 .btns {
     display: flex;
     justify-content: flex-end;
