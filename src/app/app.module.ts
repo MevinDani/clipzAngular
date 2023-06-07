@@ -15,6 +15,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfileComponent } from './profile/profile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     SignupComponent,
     HeaderComponent,
     ProfileComponent,
-    SidebarComponent
+    SidebarComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -24,7 +24,6 @@ export class PostListComponent implements OnInit {
   private postSub!: Subscription;
 
   ngOnInit(): void {
-    this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
 
     this.isLoading = true
     this.ps.getPosts()
@@ -35,6 +34,8 @@ export class PostListComponent implements OnInit {
       // console.log(posts);
           
     })
+
+    this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
 
     if(localStorage.getItem('token')) {
       this.isAuth = true

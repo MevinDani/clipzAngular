@@ -1,12 +1,15 @@
 .main {
+    /* width: 100%; */
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
+    /* justify-content: space-evenly; */
+    /* flex-direction: row;
+    justify-content: space-evenly; */
 }
 
 .sidebar {
     width: 25%;
-    margin-right: 30px;
+    margin-left: 30px;
 }
 
 .accordion-item {
@@ -26,10 +29,11 @@
     background-color: cyan;
 }
 
+
 .container {
     /* display: flex;
     flex-direction: column; */
-    width: 60%;
+    /* width: 60%; */
     /* border: 1px solid salmon; */
     margin-top: 15px;
     border-radius: 10px;
@@ -50,7 +54,13 @@
 
 .btns {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+}
+
+.prof-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .img {

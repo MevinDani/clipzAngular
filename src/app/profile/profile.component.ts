@@ -25,6 +25,7 @@ export class ProfileComponent implements OnInit {
   name:any
   private followSub!: Subscription;
   private creatorSub!:Subscription
+  about:any
 
   followStatusChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -37,8 +38,13 @@ export class ProfileComponent implements OnInit {
     this.userId = this.route.snapshot.params['id']
     this.userName = this.route.snapshot.params['name']
 
-    this.ds.getProfPost(this.userId).subscribe((result:any) => {
+    this.ds.getUser(this.userId).subscribe((result:any) => {
       // console.log(result);
+      this.about = result.about
+    })
+
+    this.ds.getProfPost(this.userId).subscribe((result:any) => {
+      console.log(result);
       this.userPost = result
       this.isLoading = false
       // console.log(this.creatorId);

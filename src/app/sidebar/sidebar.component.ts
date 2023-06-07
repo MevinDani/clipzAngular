@@ -1,4 +1,4 @@
-import { Component, DoCheck, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { DataService } from '../data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { ProfileComponent } from '../profile/profile.component';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit,DoCheck {
+export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
 
   locUserId:any
   locUname:any
@@ -183,5 +183,9 @@ export class SidebarComponent implements OnInit,DoCheck {
   //     // console.log(this.followers,this.followings);
   //   })
   // }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe()
+  }
 
 }

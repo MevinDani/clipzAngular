@@ -6,14 +6,16 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ProfileComponent } from './profile/profile.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 const routes: Routes = [
   { path:'', component:PostListComponent},
   { path:'create', component:PostCreateComponent,canActivate:[AuthGuard]},
-  { path:'edit/:postId', component:PostCreateComponent,canActivate:[AuthGuard]},
   { path:'login', component:LoginComponent},
   { path:'signup', component:SignupComponent},
-  { path:'profile/user/:id/:name', component:ProfileComponent}
+  { path:'editUser', component:EditProfileComponent},
+  { path:'edit/:postId', component:PostCreateComponent,canActivate:[AuthGuard]},
+  { path:'profile/user/:id/:name', component:ProfileComponent,canActivate:[AuthGuard]}
 ];
 
 @NgModule({
