@@ -2,7 +2,7 @@
     <div class="w-50">
         <div class="container mt-5">
             <div class="card">
-                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                <img *ngIf="profPic" [src]="profPic" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">{{userName}}</h5>
                     <p class="card-text text-center">{{ about }}
@@ -34,8 +34,9 @@
         </div>
         <div class="container" *ngFor="let p of userPost">
             <div>
-                <div>
-                    <span class="uname">{{p.name}}</span>
+                <div class="uname">
+                    <img *ngIf="profPic" [src]="profPic" class="upic">
+                    <span>{{p.name}}</span>
                 </div>
                 <div class="header">
                     <p>{{ p.title }}</p>

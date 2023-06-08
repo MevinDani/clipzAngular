@@ -27,6 +27,8 @@ export class ProfileComponent implements OnInit {
   private creatorSub!:Subscription
   about:any
 
+  profPic:any
+
   followStatusChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   followId:any
@@ -41,10 +43,11 @@ export class ProfileComponent implements OnInit {
     this.ds.getUser(this.userId).subscribe((result:any) => {
       // console.log(result);
       this.about = result.about
+      this.profPic = result.profilePic
     })
 
     this.ds.getProfPost(this.userId).subscribe((result:any) => {
-      console.log(result);
+      // console.log(result);
       this.userPost = result
       this.isLoading = false
       // console.log(this.creatorId);

@@ -6,7 +6,7 @@
         <div class="card-body">
             <h5 class="card-title text-center">{{ mode=='create' ? 'Add New Post' : mode=='edit' ? 'Edit Post' : '' }}
             </h5>
-            <form [formGroup]=" postForm" (ngSubmit)="onAddPost()" *ngIf="!isLoading">
+            <form [formGroup]="postForm" (ngSubmit)="onAddPost()" *ngIf="!isLoading">
                 <input type="text" formControlName="title" id="title" name="title" class="form-control"
                     placeholder="Enter a title">
                 <div *ngIf="(this.postForm.get('title')?.errors)&&(this.postForm.get('title')?.touched)">
@@ -20,7 +20,7 @@
                         <img [src]="imagePreview" [alt]="postForm.value.title">
                     </div>
                     <div *ngIf="!imageCheck">
-                        <p class="text-danger">File should be an Image</p>
+                        <p class="text-danger">Select an Image</p>
                     </div>
                 </div>
                 <textarea class=" form-control mb-2" formControlName="content" id="cont" name="cont" rows="6"

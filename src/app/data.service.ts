@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class DataService implements OnInit {
+
   logUserId:any
   private followArr:any = []
   private followArrUpd = new Subject()
@@ -117,5 +118,8 @@ export class DataService implements OnInit {
     })
   }
 
+  getProfPic(name:any) {
+    return this.http.get('http://localhost:2000/api/users/profilePics/'+name)
+  }
 
 }

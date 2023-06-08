@@ -80,6 +80,11 @@
     /* cursor: pointer; */
     font-size: 15px;
     font-weight: bold;
+    width: max-content;
+}
+
+.uname span {
+    margin-left: 8px;
 }
 
 .followup {
@@ -88,6 +93,20 @@
 
 .unfollow {
     color: green
+}
+
+.card-img-top {
+    border-radius: 12px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+    object-fit: cover;
+    object-position: 100%;
+    height: 300px;
+}
+
+.upic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 /* .uname:hover {

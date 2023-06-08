@@ -50,7 +50,8 @@ export class PostService implements OnInit {
                         id:post._id,
                         imagePath:post.imagePath,
                         creator:post.creator,
-                        name:post.name
+                        name:post.name,
+                        likes:post.likes
                     }
                 })
             }))
@@ -85,7 +86,8 @@ export class PostService implements OnInit {
                     content: responseData.post.content,
                     imagePath: responseData.post.imagePath,
                     creator: responseData.post.creator,
-                    name:responseData.post.name
+                    name: responseData.post.name,
+                    likes: undefined
                 } 
                 // console.log(post);           
                 this.posts.push(post)
@@ -103,6 +105,7 @@ export class PostService implements OnInit {
             postData.append('title',title)
             postData.append('content',content)
             postData.append('image',image,title)
+            console.log(postData);
         } else {
             postData = {
                id: id, 
@@ -117,6 +120,38 @@ export class PostService implements OnInit {
             this.router.navigateByUrl('')
         })
     }
+
+    editProfile(id:any,username:any,about:any,image:any) {
+        let postData:any
+        if(typeof image == 'object') {
+            postData = new FormData()
+            postData.append('id',id)
+            postData.append('username',username)
+            postData.append('about',about)
+            postData.append('image',image)
+            console.log(postData);
+        } else {
+            postData = {
+                id:id,
+                username: username,
+                about: about,
+                image: image
+            }
+            // console.log(postData);
+        }
+        this.http.put('http://localhost:2000/api/users/profile/edit/', postData)
+            .subscribe((result:any) => {
+                // console.log(result);
+                if(result.message == 'Profile Edited Successfully') {
+                    this.toastr.success('Profile Edited Successfully!')
+                    this.router.navigateByUrl('/profile/user/'+id+'/'+username)
+                } else {
+                    this.toastr.error(result.message)
+                }
+            })
+    }
+
+
 
     deletePost(postId:string) {
         this.http.delete('http://localhost:2000/api/posts/' +postId, this.tokenHead())
@@ -160,6 +195,16 @@ export class PostService implements OnInit {
 
     getFollowersList(id:any) {
         return this.http.get('http://localhost:2000/api/users/followersList/'+id)
+    }
+
+    likePost(postId:any) {
+        const logUserId = JSON.parse(localStorage.getItem("uid") || "")
+        const body = {
+            id:logUserId
+        }
+        return this.http.put('http://localhost:2000/api/posts/post/like/'+postId, body).subscribe((result:any) => {
+            console.log(result);
+        })
     }
 
 }

@@ -4,5 +4,6 @@ export interface Post {
     content:any;
     imagePath:any;
     creator:any;
-    name:any
+    name:any;
+    likes:any
 }

@@ -33,6 +33,7 @@ const upload = require('../middleware/multer')
 router.get('', (req, res) => {
     Post.find().sort({ _id: -1 }).limit(100)
         .then((documents) => {
+            // console.log(documents)
             res.status(200).json({
                 message: 'Post fetched successfully',
                 posts: documents
@@ -170,6 +171,24 @@ router.get('/profile/:id', (req, res) => {
         res.status(200).json(result)
     }).catch(err => {
         res.status(403).json(err)
+    })
+})
+
+// like a post
+router.put('/post/like/:id', (req, res) => {
+    logic.likePost(req.params.id, req.body.id).then((result) => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(400).json(err)
+    })
+})
+
+// dislike a post
+router.put('/post/dislike/:id', (req, res) => {
+    logic.dislikePost(req.params.id, req.body.id).then((result) => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(400).json(err)
     })
 })
 

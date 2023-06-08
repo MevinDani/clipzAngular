@@ -1,0 +1,16 @@
+input[type='file'] {
+    display: none;
+}
+
+.imagePreview {
+    height: 10rem;
+    margin: 1rem 0;
+}
+
+.imagePreview img {
+    height: 100%;
+}
+
+label p {
+    color: coral;
+}

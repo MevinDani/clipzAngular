@@ -154,4 +154,47 @@ followerList = async (id) => {
     }
 }
 
-module.exports = { register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }
+getProfilePics = async (username) => {
+    const user = await User.findOne({ username })
+    if (user) {
+        const { profilePic } = user._doc
+        return profilePic
+    } else {
+        return {
+            message: 'Some error retreiving profile pics'
+        }
+    }
+}
+
+likePost = async (postId, userId) => {
+    try {
+        const post = await Post.findOne({ _id: postId })
+        if (!post.likes.includes(userId)) {
+            await post.updateOne({ $push: { likes: userId } })
+            return {
+                message: 'Post has been liked'
+            }
+        }
+    } catch (error) {
+        return error
+    }
+}
+
+// dislike a post
+dislikePost = async (postId, userId) => {
+    try {
+        const post = await Post.findOne({ _id: postId })
+        if (post.likes.includes(userId)) {
+            await post.updateOne({ $pull: { likes: userId } })
+            return {
+                message: 'Like has been removed'
+            }
+        }
+    } catch (error) {
+        return error
+    }
+}
+
+// editProfile = async ()
+
+module.exports = { dislikePost, likePost, getProfilePics, register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }

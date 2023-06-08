@@ -9,8 +9,10 @@
 
 <div *ngIf="locUserId" class="container mt-5 prof-cont">
     <div class="card">
-        <!-- <img src="..." class="card-img-top" alt="..."> -->
-        <div class="card-body">
+        <div class="prof-pic">
+            <img *ngIf="logUserProPic" [src]="logUserProPic" class="card-img-top img-responsive">
+        </div>
+        <div class=" card-body">
             <h5 class="card-title text-center">Welcome, {{userName}}</h5>
             <div class="prof-btns">
                 <button [routerLink]="['/profile/user',locUserId,userName]" class="btn btn-primary">
@@ -27,7 +29,10 @@
 <div class="container" *ngFor="let p of posts">
     <div *ngIf="!isLoading">
         <div>
-            <span class="uname" [routerLink]="['/profile/user',p.creator,p.name]">{{p.name}}</span>
+            <div class="usname" [routerLink]="['/profile/user',p.creator,p.name]">
+                <img *ngIf="postProfPic[p.name]" [src]="postProfPic[p.name]" class="upic">
+                <span class="uname">{{p.name}}</span>
+            </div>
             <!-- <span *ngFor="let u of followArr"> -->
             <!-- <span *ngIf="isAuth && (p.creator !== locUserId)" class="follow"
                 (click)="followUser(p.creator)">Follow</span> -->
@@ -47,6 +52,11 @@
         <div class="btns" *ngIf="isAuth && (p.creator == locUserId)">
             <button class="btn btn-primary m-1" [routerLink]="['/edit',p.id]">EDIT</button>
             <button class="btn btn-danger m-1" (click)="deletePost(p.id)">DELETE</button>
+        </div>
+        <div>
+            <i [ngClass]="{'liked':logUserLikes[p.id],'like':!logUserLikes[p.id]}" (click)="likePost(p.id)"
+                class="fa-regular fa-heart fa-lg"></i>
+            <p *ngIf="logUserLikes[p.id]">1</p>
         </div>
     </div>
 </div>

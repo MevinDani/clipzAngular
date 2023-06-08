@@ -29,7 +29,7 @@ export class PostCreateComponent implements OnInit {
         this.isLoading = true
         this.ps.getPostEdit(this.postId).subscribe(postData => {
           this.isLoading = false
-          this.post = {id:postData._id,title:postData.title,content:postData.content,imagePath:postData.imagePath,creator:postData.creator,name:postData['name']}
+          this.post = {id:postData._id,title:postData.title,content:postData.content,imagePath:postData.imagePath,creator:postData.creator,name:postData['name'],likes:undefined}
           this.postForm.controls['title'].setValue(this.post.title)
           this.postForm.controls['content'].setValue(this.post.content)
           this.postForm.controls['image'].setValue(this.post.imagePath)
@@ -42,8 +42,8 @@ export class PostCreateComponent implements OnInit {
   }
 
   postForm = this.fb.group({
-    title:['',[Validators.required,Validators.minLength(3),Validators.pattern('[0-9a-zA-Z ]+')]],
-    content:['',[Validators.required,Validators.minLength(4),Validators.pattern('[0-9a-zA-Z ]+')]],
+    title:['',[Validators.required,Validators.minLength(3),Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+    content:['',[Validators.required,Validators.minLength(4),Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
     image:['',[Validators.required]]
   })
 
