@@ -195,6 +195,23 @@ dislikePost = async (postId, userId) => {
     }
 }
 
-// editProfile = async ()
+// get liked post
+getlikedPost = async (id) => {
+    try {
+        const likedPosts = await Post.find({ likes: id }).sort({ _id: -1 })
+        // console.log(likedPosts);
+        if (likedPosts) {
+            return likedPosts
+        }
+    } catch (error) {
+        return error
+    }
+}
 
-module.exports = { dislikePost, likePost, getProfilePics, register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }
+// get Followings Post
+getFollowingsPost = async(id) => {
+    
+}
+
+
+module.exports = { getlikedPost, dislikePost, likePost, getProfilePics, register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }

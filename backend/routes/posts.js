@@ -192,4 +192,16 @@ router.put('/post/dislike/:id', (req, res) => {
     })
 })
 
+// get Liked Posts
+router.get('/likedPosts/:id', (req, res) => {
+    logic.getlikedPost(req.params.id).then((result) => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(400).json(err)
+    })
+})
+
+// get followers post
+router.get('/followersPost/:id')
+
 module.exports = router

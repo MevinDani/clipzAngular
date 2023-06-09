@@ -109,6 +109,21 @@
     border-radius: 50%;
 }
 
+svg {
+    cursor: pointer;
+}
+
+.likeDis {
+    display: flex;
+    justify-content: left;
+}
+
+.postBtns {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
 /* .uname:hover {
     background-color: coral;
 } */
