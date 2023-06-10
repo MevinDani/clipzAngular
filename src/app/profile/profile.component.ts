@@ -41,6 +41,8 @@ export class ProfileComponent implements OnInit {
   followId: any
   unfollowId: any
 
+  inLikedPost = false
+
   constructor(private route: ActivatedRoute, private ds: DataService, private ps: PostService, private router: Router) { }
 
   ngOnInit(): void {
@@ -177,13 +179,14 @@ export class ProfileComponent implements OnInit {
     // if (this.postLikesNum[id]) this.postLikesNum[id]--
     this.postLikesNum[id]--
     // console.log(this.userPost);
-    this.userPost = this.userPost.filter((obj: any) => obj._id !== id)
+    if (this.inLikedPost) this.userPost = this.userPost.filter((obj: any) => obj._id !== id)
     this.ps.dislikePost(id)
     // this.likeCheck = true
     // console.log(id, 'dislike code have to run');
   }
 
   getYourPosts(id: any) {
+    // console.log(this.inLikedPost);
     this.ds.getProfPost(this.userId).subscribe((result: any) => {
       // console.log(result);
       this.userPost = result
@@ -211,6 +214,8 @@ export class ProfileComponent implements OnInit {
   }
 
   getLikedPosts(id: any) {
+    this.inLikedPost = true
+    // console.log(this.inLikedPost);
     this.ps.getLikedPosts(id).subscribe((result: any) => {
       // console.log(result);
 
@@ -248,8 +253,44 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  getFollowersPosts(id: any) {
+  getFollowingsPosts(id: any) {
+    this.inLikedPost = false
+    // console.log(this.inLikedPost);
+    this.ps.getFollowingsPost(id).subscribe((result: any) => {
+      // console.log(result);
 
+      for (let n of result) {
+        // console.log(n.name);
+        this.postCreators.push(n.name)
+      }
+      // console.log(this.postCreators);
+      // unique(rm dupes)
+      this.postCreators = [...new Set(this.postCreators)];
+      // console.log(this.postCreators);
+
+      for (let u of this.postCreators) {
+        this.ds.getProfPic(u).subscribe((result: any) => {
+          // console.log(u, result);
+          this.postProfPic[u] = result
+          // console.log(this.postProfPic);
+        })
+      }
+      // console.log(this.postProfPic);
+
+
+      this.userPost = result
+      // console.log(this.logUserLikes);
+      for (let l of result) {
+        // console.log(l);
+        this.postLikesNum[l._id] = l.likes.length
+        for (let u of l.likes) {
+          if (u == this.locUserId) {
+            this.logUserLikes[l._id] = true
+          }
+        }
+        // this.likes[l.id] = l.likes
+      }
+    })
   }
 
 

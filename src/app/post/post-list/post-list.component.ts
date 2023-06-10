@@ -3,6 +3,9 @@ import { Post } from '../post.model';
 import { PostService } from '../post.service';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/data.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-post-list',
@@ -10,7 +13,7 @@ import { DataService } from 'src/app/data.service';
   styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit {
-  constructor(private ps: PostService, private ds: DataService) { }
+  constructor(private toastr: ToastrService, private ps: PostService, private ds: DataService, private fb: FormBuilder) { }
   isLoading = false
   isAuth: any
   isAllowed: any
@@ -32,6 +35,8 @@ export class PostListComponent implements OnInit {
 
   posts: Post[] = []
   private postSub!: Subscription;
+
+  openCmtBox: { [postId: number]: boolean } = {}
 
   ngOnInit(): void {
 
@@ -147,6 +152,39 @@ export class PostListComponent implements OnInit {
     // this.likeCheck = true
     // console.log('dislike code have to run');
   }
+
+  cmntBox(id: any) {
+    this.openCmtBox[id] = !this.openCmtBox[id]
+  }
+
+  commentForm = this.fb.group({
+    comment: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+  })
+
+  commFormSubmit(id: any) {
+    if (this.commentForm.invalid) {
+      console.log('form invalid');
+      return
+    }
+    const commPath = this.commentForm.value
+    // console.log(id, commPath.comment, this.locUserId, this.userName);
+    this.ps.addComment(id, commPath.comment, this.locUserId, this.userName).subscribe((result: any) => {
+      console.log(result);
+      if (result.message == 'Comment added successfully') {
+        this.toastr.success('Comment added successfully')
+      }
+    })
+    this.commentForm.reset()
+  }
+
+  getComments(id: any) {
+    this.ps.getComments(id).subscribe((result: any) => {
+      console.log(result);
+      console.log(this.postProfPic);
+
+    })
+  }
+
 
 
   // ngOnDestroy(): void {

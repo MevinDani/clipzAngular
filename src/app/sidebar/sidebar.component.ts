@@ -10,34 +10,34 @@ import { ProfileComponent } from '../profile/profile.component';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
+export class SidebarComponent implements OnInit, DoCheck, OnDestroy {
 
-  locUserId:any
-  locUname:any
+  locUserId: any
+  locUname: any
 
-  followers:any = []
-  followings:any = []
+  followers: any = []
+  followings: any = []
 
-  userId:any
-  userName:any
+  userId: any
+  userName: any
 
-  sideFollowers:any = []
-  sideFollowings:any = []
+  sideFollowers: any = []
+  sideFollowings: any = []
 
-  sideFollowSub!:Subscription
+  sideFollowSub!: Subscription
   sideFollowingSub!: Subscription
 
-  routeId:any
-  routeName:any
+  routeId: any
+  routeName: any
 
   // @Input() followNum:any
   // @Input() unfollowNum:any
-  @Input() statChng:any
+  @Input() statChng: any
 
   followStatus!: boolean;
   subscription: Subscription;
 
-  constructor(private ds:DataService,private route:ActivatedRoute,private router:Router,private parentComponent:ProfileComponent) {
+  constructor(private ds: DataService, private route: ActivatedRoute, private router: Router, private parentComponent: ProfileComponent) {
     this.subscription = this.parentComponent.followStatusChange.subscribe((status: boolean) => {
       this.followStatus = status;
       // console.log('Follow Status Changed:', this.followStatus);
@@ -47,21 +47,21 @@ export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
 
   ngDoCheck(): void {
     // console.log(this.followStatus);
-    
-    if((this.followStatus == true) && (!this.followers.includes(this.locUname))) {
+
+    if ((this.followStatus == true) && (!this.followers.includes(this.locUname))) {
       this.followers.push(this.locUname)
       // console.log(this.followers,"inloop if");
       // this.followNum = ''
       // console.log(this.statChng,"followempty");
-      
+
     }
-    if((this.followStatus == false) && (this.followers.includes(this.locUname))) {
-      this.followers = this.followers.filter((fid:any) => fid !== this.locUname)
+    if ((this.followStatus == false) && (this.followers.includes(this.locUname))) {
+      this.followers = this.followers.filter((fid: any) => fid !== this.locUname)
       // console.log(this.followers);
       // console.log(this.followers,"inloop else");
       // this.unfollowNum = ''
       // console.log(!this.statChng,"unflempty");
-      
+
     }
   }
 
@@ -75,21 +75,21 @@ export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
 
   //   //   // console.log(currentValueFollow,previousValueFollow);
   //   //   // console.log(currentValueUnfollow,previousValueUnfollow);
-      
+
   //   //   // React to changes in the input property
   //   //   // Perform necessary actions based on currentValue and previousValue
   //   // }
   //   // console.log(this.statChng);
-    
+
   //   // console.log(this.followNum,this.unfollowNum);
   //   console.log(this.followStatus);
-    
+
   //   if(this.followStatus && (!this.followers.includes(this.locUname))) {
   //     this.followers.push(this.locUname)
   //     console.log(this.followers,"inloop if");
   //     // this.followNum = ''
   //     console.log(this.statChng,"followempty");
-      
+
   //   }
   //   if(this.followStatus && (this.followers.includes(this.locUname))) {
   //     this.followers = this.followers.filter((fid:any) => fid !== this.locUname)
@@ -97,7 +97,7 @@ export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
   //     console.log(this.followers,"inloop else");
   //     // this.unfollowNum = ''
   //     console.log(!this.statChng,"unflempty");
-      
+
   //   }
   // }
 
@@ -111,18 +111,18 @@ export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
     this.userId = this.route.snapshot.params['id']
     // this.userName = this.route.snapshot.params['name']
 
-    if(localStorage.getItem('uid')) {
+    if (localStorage.getItem('uid')) {
       this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
     }
 
     // get logUserName
-    this.ds.getUser(this.locUserId).subscribe((result:any) => {
+    this.ds.getUser(this.locUserId).subscribe((result: any) => {
       // console.log((result));
       this.locUname = result.username
       // console.log(this.locUname);
     })
 
-    this.ds.getUser(this.userId).subscribe((result:any) => {
+    this.ds.getUser(this.userId).subscribe((result: any) => {
       // console.log(result);
       this.followers = result.followersName
       this.followings = result.followingsName
@@ -132,57 +132,29 @@ export class SidebarComponent implements OnInit,DoCheck,OnDestroy {
     // observables for getting followers/ings
     this.ds.getSideFs(this.userId)
     this.sideFollowSub = this.ds.getUpdatedSideFollowArrListener()
-      .subscribe((result:any) => {
+      .subscribe((result: any) => {
         // console.log(result,"followers");
       })
     this.sideFollowingSub = this.ds.getUpdatedSideFollowinArrListener()
-      .subscribe((result:any) => {
+      .subscribe((result: any) => {
         // console.log(result,"followings");
       })
   }
 
-  userProf(name:any) {
+  userProf(name: any) {
     // console.log(name);
-    this.ds.getProfile(name).subscribe((result:any) => {
+    this.ds.getProfile(name).subscribe((result: any) => {
       // console.log(result);
-       this.routeId = result.other._id
-       this.routeName = result.other.username
+      this.routeId = result.other._id
+      this.routeName = result.other.username
       //  console.log(this.routeId);
       //  console.log(this.routeName);
 
-       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-         this.router.navigateByUrl('/profile/user/'+this.routeId+'/'+this.routeName);
-       });
-      })
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigateByUrl('/profile/user/' + this.routeId + '/' + this.routeName);
+      });
+    })
   }
-
-
-
-  // ngDoCheck(): void {
-  //   console.log(this.followNum,this.unfollowNum);
-  //   if(this.followNum && (!this.followers.includes(this.locUname))) {
-  //     this.followers.push(this.locUname)
-  //     console.log(this.followers,"inloop if");
-  //     return
-  //   }
-  //   if(this.unfollowNum && (this.followers.includes(this.locUname))) {
-  //     this.followers = this.followers.filter((fid:any) => fid !== this.locUname)
-  //     // console.log(updatedFollowArr);
-  //     console.log(this.followers,"inloop else");
-  //     return
-  //   }
-  // }
-
-
-  // ngDoCheck(): void {
-  //   console.log("ngonchngruns");
-  //   this.ds.getUser(this.userId).subscribe((result:any) => {
-  //     // console.log(result);
-  //     this.followers = result.followersName
-  //     this.followings = result.followingsName
-  //     // console.log(this.followers,this.followings);
-  //   })
-  // }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe()

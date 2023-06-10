@@ -142,9 +142,30 @@
 
 svg {
     cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+svg:hover {
+    transform: scale(1.2);
+}
+
+.lkdis {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .likeDis {
+    /* background-color: aquamarine; */
+    width: 20%;
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
+}
+
+.cmts {
+    cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+.cmts:hover {
+    transform: scale(1.2);
 }

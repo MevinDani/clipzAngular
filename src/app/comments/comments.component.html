@@ -1,0 +1,9 @@
+<div class="mb-3 cmtBox">
+    <label for="exampleFormControlTextarea1" class="form-label">Comments</label>
+    <div>comment content</div>
+    <form [formGroup]="commentForm" (ngSubmit)="commFormSubmit()">
+        <textarea formControlName="comment" id="comment" name="comment" class="form-control mb-4"
+            placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <button class="btn btn-success">Add Comments</button>
+    </form>
+</div>

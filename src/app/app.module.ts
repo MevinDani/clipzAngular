@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfileComponent } from './profile/profile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { CommentsComponent } from './comments/comments.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     HeaderComponent,
     ProfileComponent,
     SidebarComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,

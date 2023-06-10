@@ -1,5 +1,5 @@
 const express = require('express')
-const Post = require('../service/db')
+const { Post, Comment } = require('../service/db')
 const router = express.Router()
 const multer = require('multer')
 const tokenMiddle = require('../middleware/token')
@@ -31,7 +31,7 @@ const upload = require('../middleware/multer')
 
 // all posts
 router.get('', (req, res) => {
-    Post.find().sort({ _id: -1 }).limit(100)
+    Post.find().sort({ lastUpdated: -1 })
         .then((documents) => {
             // console.log(documents)
             res.status(200).json({
@@ -66,7 +66,7 @@ router.post('', tokenMiddle, upload.single('image'), async (req, res) => {
             content: req.body.content,
             imagePath: result.url,
             creator: req.userToken.userId,
-            name: user.username
+            name: user.username,
         })
         post.save().then((createdPostId) => {
             res.status(201).json({
@@ -86,7 +86,7 @@ router.post('', tokenMiddle, upload.single('image'), async (req, res) => {
 })
 
 // update post
-router.put('/:id', tokenMiddle, upload.single('image'), (req, res) => {
+router.put('/:id', tokenMiddle, upload.single('image'), async (req, res) => {
     // console.log(req)
     if (req.file) {
         cloudinary.uploader.upload(req.file.path, async (err, result) => {
@@ -103,9 +103,9 @@ router.put('/:id', tokenMiddle, upload.single('image'), (req, res) => {
                 content: req.body.content,
                 imagePath: result.url
             })
-            Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
+            await Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
                 if (result.modifiedCount > 0) {
-                    // console.log(result);
+                    console.log(result);
                     res.status(200).json({ message: 'Post Updated successfull' })
                 } else {
                     console.log(Error);
@@ -122,12 +122,12 @@ router.put('/:id', tokenMiddle, upload.single('image'), (req, res) => {
             content: req.body.content,
             imagePath: req.body.imagePath
         })
-        Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
+        await Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
             if (result.modifiedCount > 0) {
                 // console.log(result);
                 res.status(200).json({ message: 'Post Updated successfull' })
             } else {
-                // console.log(Error);
+                console.log(Error);
                 res.status(401).json({ message: 'Unauthorized user' })
             }
         }).catch((err) => {
@@ -201,7 +201,49 @@ router.get('/likedPosts/:id', (req, res) => {
     })
 })
 
-// get followers post
-router.get('/followersPost/:id')
+// get followings post
+router.get('/followersPost/:id', (req, res) => {
+    logic.getFollowingsPost(req.params.id).then((result) => {
+        res.status(200).json(result)
+    }).catch(err => {
+        res.status(400).json(err)
+    })
+})
+
+// add comments
+router.post('/:postId/comments', async (req, res) => {
+    try {
+        const { postId } = req.params
+        const { content, userId, name } = req.body
+
+        const comment = new Comment({
+            content,
+            postId,
+            userId,
+            name
+        })
+        await comment.save()
+
+        const post = await Post.findByIdAndUpdate(postId, { $push: { comments: comment._id } }, { new: true })
+        res.status(201).json({ message: 'Comment added successfully', comment, post });
+    } catch (error) {
+        console.error('Failed to add comment', error);
+        res.status(500).json({ error: 'Failed to add comment' });
+    }
+})
+
+// retrieve comments of a post
+router.get('/:postId/comments', async (req, res) => {
+    try {
+        const { postId } = req.params
+        const post = await Post.findById(postId).populate('comments')
+        const comments = post.comments
+
+        res.status(200).json({ comments })
+    } catch (error) {
+        console.error('Failed to retrieve comments', error);
+        res.status(500).json({ error: 'Failed to retrieve comments' });
+    }
+})
 
 module.exports = router

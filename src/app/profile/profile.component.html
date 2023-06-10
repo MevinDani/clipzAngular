@@ -28,9 +28,9 @@
         </div>
 
         <div *ngIf="locUserId && (userId==locUserId)" class="postBtns">
-            <button (click)="getYourPosts(locUserId)" class="btn btn-success">Your Posts</button>
-            <button (click)="getLikedPosts(locUserId)" class="btn btn-success">Liked Posts</button>
-            <button (click)="getFollowersPosts(locUserId)" class="btn btn-success">Followings Post</button>
+            <button (click)="getYourPosts(locUserId)" class="btn btn-success">My Posts</button>
+            <button (click)="getLikedPosts(locUserId)" class="btn btn-danger">Liked Posts</button>
+            <button (click)="getFollowingsPosts(locUserId)" class="btn btn-info">Followings Post</button>
         </div>
 
         <div class="d-flex justify-content-center">

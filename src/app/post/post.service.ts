@@ -79,7 +79,7 @@ export class PostService implements OnInit {
         postData.append('image', image, title)
         this.http.post<{ message: string, post: Post }>('http://localhost:2000/api/posts', postData, this.tokenHead())
             .subscribe((responseData) => {
-                // console.log(responseData);
+                console.log(responseData);
                 const post: Post = {
                     id: responseData.post.id,
                     title: responseData.post.title,
@@ -89,8 +89,9 @@ export class PostService implements OnInit {
                     name: responseData.post.name,
                     likes: undefined
                 }
-                // console.log(post);           
+                console.log(post);
                 this.posts.push(post)
+                console.log(this.posts);
                 this.postUpdated.next([...this.posts])
                 this.toastr.success('Post added successfully!')
                 this.router.navigateByUrl('')
@@ -116,6 +117,8 @@ export class PostService implements OnInit {
         }
         this.http.put('http://localhost:2000/api/posts/' + id, postData, this.tokenHead())
             .subscribe(response => {
+                console.log(response);
+
                 this.toastr.success('Post updated Successfully!')
                 this.router.navigateByUrl('')
             })
@@ -219,6 +222,25 @@ export class PostService implements OnInit {
 
     getLikedPosts(id: any) {
         return this.http.get('http://localhost:2000/api/posts/likedPosts/' + id)
+    }
+
+    getFollowingsPost(id: any) {
+        return this.http.get('http://localhost:2000/api/posts/followersPost/' + id)
+    }
+
+    addComment(id: any, content: any, userId: any, name: any) {
+        const logUserId = JSON.parse(localStorage.getItem("uid") || "")
+        const body = {
+            content,
+            userId,
+            name
+        }
+
+        return this.http.post('http://localhost:2000/api/posts/' + id + '/comments', body)
+    }
+
+    getComments(id: any) {
+        return this.http.get('http://localhost:2000/api/posts/' + id + '/comments')
     }
 
 }

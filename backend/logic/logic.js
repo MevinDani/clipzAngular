@@ -209,9 +209,29 @@ getlikedPost = async (id) => {
 }
 
 // get Followings Post
-getFollowingsPost = async(id) => {
-    
+getFollowingsPost = async (id) => {
+    try {
+        const user = await User.findOne({ _id: id })
+        if (user) {
+            let followingPost = []
+            let userFollowings = []
+            userFollowings = [...user.followings]
+            // console.log(userFollowings);
+            const posts = await Post.find()
+            posts.map(p => {
+                userFollowings.map(u => {
+                    if (u == p.creator) {
+                        followingPost.push(p)
+                    }
+                })
+            })
+            // console.log(followingPost);
+            return followingPost
+        }
+    } catch (error) {
+        return error
+    }
 }
 
 
-module.exports = { getlikedPost, dislikePost, likePost, getProfilePics, register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }
+module.exports = { getFollowingsPost, getlikedPost, dislikePost, likePost, getProfilePics, register, login, getUser, getUserN, getProfPost, followUser, followerList, unfollowUser }
