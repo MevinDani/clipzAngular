@@ -1,5 +1,5 @@
 const User = require('../service/userDb')
-const Post = require('../service/db')
+const { Post } = require('../service/db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -79,7 +79,9 @@ getUserN = async (name) => {
 }
 
 getProfPost = async (id) => {
+    console.log(id);
     const post = await Post.find({ creator: id }).sort({ _id: -1 }).limit(100)
+    // console.log(post);
     if (post) {
         return post
     } else {
@@ -169,6 +171,7 @@ getProfilePics = async (username) => {
 likePost = async (postId, userId) => {
     try {
         const post = await Post.findOne({ _id: postId })
+        // console.log(post);
         if (!post.likes.includes(userId)) {
             await post.updateOne({ $push: { likes: userId } })
             return {

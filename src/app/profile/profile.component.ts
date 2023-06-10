@@ -76,9 +76,9 @@ export class ProfileComponent implements OnInit {
       })
 
     this.ds.getProfPost(this.userId).subscribe((result: any) => {
-      // console.log(result);
+      console.log(result);
       this.userPost = result
-      // console.log(this.userPost);
+      console.log(this.userPost);
 
       this.isLoading = false
       this.locUserId = JSON.parse(localStorage.getItem('uid') || '')

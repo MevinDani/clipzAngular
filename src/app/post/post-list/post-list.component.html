@@ -77,12 +77,26 @@
         </div>
     </div>
     <div *ngIf="openCmtBox[p.id]" class="mb-3 cmtBox">
-        <label for="exampleFormControlTextarea1" class="form-label">Comments</label>
-        <div>comment content</div>
-        <form [formGroup]="commentForm" (ngSubmit)="commFormSubmit(p.id)">
-            <textarea formControlName="comment" id="comment" name="comment" class="form-control mb-4"
-                placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            <button class="btn btn-success">Add Comments</button>
+        <!-- <label for="exampleFormControlTextarea1" class="form-label">Comments</label> -->
+        <div class="cmtCont">
+            <div class="d-flex flex-column m-2 singCmt" *ngFor="let c of comments">
+                <!-- <img src="..." class="card-img-top" alt="..."> -->
+                <div class="usname" [routerLink]="['/profile/user',c.userId,c.name]">
+                    <img *ngIf="postProfPic[c.name]" [src]="postProfPic[c.name]" class="cpic">
+                    <span class="uname">{{c.name}}</span>
+                </div>
+                <p class="card-text">{{c.content}}</p>
+            </div>
+        </div>
+        <form class="d-flex flex-column align-items-center" [formGroup]="commentForm" (ngSubmit)="commFormSubmit(p.id)">
+            <textarea formControlName="comment" id="comment" name="comment" class="form-control"
+                placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+            <div *ngIf="(this.commentForm.get('comment')?.errors)&&(this.commentForm.get('comment')?.touched)">
+                <p class="text-danger">Minimum 3 characters required</p>
+            </div>
+            <button class="btn btn-success mt-2" style="height: 30px;">
+                <p style="font-size: small;">Add Comments</p>
+            </button>
         </form>
     </div>
     <!-- <app-comments *ngIf="openCmtBox[p.id]"></app-comments> -->

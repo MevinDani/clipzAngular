@@ -38,6 +38,8 @@ export class PostListComponent implements OnInit {
 
   openCmtBox: { [postId: number]: boolean } = {}
 
+  comments: any = []
+
   ngOnInit(): void {
 
     this.isLoading = true
@@ -174,14 +176,18 @@ export class PostListComponent implements OnInit {
         this.toastr.success('Comment added successfully')
       }
     })
+    const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName }
+    this.comments.push(newComm)
     this.commentForm.reset()
   }
 
   getComments(id: any) {
+    this.comments = []
     this.ps.getComments(id).subscribe((result: any) => {
       console.log(result);
       console.log(this.postProfPic);
-
+      this.comments = result
+      console.log(this.comments, 'comm');
     })
   }
 

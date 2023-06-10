@@ -167,9 +167,10 @@ router.delete('/:id', tokenMiddle, (req, res) => {
 // get profile posts
 router.get('/profile/:id', (req, res) => {
     logic.getProfPost(req.params.id).then(result => {
-        // console.log(result);
+        console.log(result);
         res.status(200).json(result)
     }).catch(err => {
+        console.log(err);
         res.status(403).json(err)
     })
 })
@@ -239,7 +240,7 @@ router.get('/:postId/comments', async (req, res) => {
         const post = await Post.findById(postId).populate('comments')
         const comments = post.comments
 
-        res.status(200).json({ comments })
+        res.status(200).json(comments)
     } catch (error) {
         console.error('Failed to retrieve comments', error);
         res.status(500).json({ error: 'Failed to retrieve comments' });
