@@ -227,3 +227,27 @@ svg:hover {
 .comment-list {
     display: inline-block;
 }
+
+.cmtCont {
+    position: relative;
+}
+
+.cmtLatBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    z-index: 1;
+}
+
+.singCmt.first-comment {
+    margin-top: 50px;
+}
+
+.comments-wrapper {
+    margin-top: 50px;
+}
+
+.cmntDel {
+    
+}

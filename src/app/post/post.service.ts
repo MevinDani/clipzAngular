@@ -117,7 +117,7 @@ export class PostService implements OnInit {
         }
         this.http.put('http://localhost:2000/api/posts/' + id, postData, this.tokenHead())
             .subscribe(response => {
-                console.log(response);
+                // console.log(response);
 
                 this.toastr.success('Post updated Successfully!')
                 this.router.navigateByUrl('')
@@ -241,6 +241,10 @@ export class PostService implements OnInit {
 
     getComments(id: any) {
         return this.http.get('http://localhost:2000/api/posts/' + id + '/comments')
+    }
+
+    getLatestComments(id: any) {
+        return this.http.get('http://localhost:2000/api/posts/' + id + '/comments/latest')
     }
 
 }

@@ -45,6 +45,8 @@ export class PostListComponent implements OnInit {
   comments: any = []
   isCmtLoading = false
 
+  toggleCmtBtn = false
+
   ngOnInit(): void {
 
     this.isLoading = true
@@ -226,7 +228,39 @@ export class PostListComponent implements OnInit {
     this.isCmtLoading = true
     this.comments = []
     this.ps.getComments(id).subscribe((result: any) => {
-      console.log(result);
+      // console.log(result);
+      // console.log(this.postProfPic);
+      // this.comments = result
+      this.comments = result.map((comment: any) => {
+        return {
+          ...comment,
+          createdAt: new Date(comment.createdAt)
+        };
+      })
+      this.isCmtLoading = false
+      // console.log(this.comments, 'comm');
+    })
+  }
+
+  showLatestComments(id: any) {
+    this.toggleCmtBtn = true
+    // console.log(id);
+    this.ps.getLatestComments(id).subscribe((result: any) => {
+      // console.log(result);
+      this.comments = result.map((comment: any) => {
+        return {
+          ...comment,
+          createdAt: new Date(comment.createdAt)
+        };
+      })
+    })
+  }
+
+  showOldestComments(id: any) {
+    this.toggleCmtBtn = false
+    // this.getComments(id)
+    this.ps.getComments(id).subscribe((result: any) => {
+      // console.log(result);
       // console.log(this.postProfPic);
       // this.comments = result
       this.comments = result.map((comment: any) => {

@@ -97,42 +97,52 @@ router.put('/:id', tokenMiddle, upload.single('image'), async (req, res) => {
                     message: 'Error'
                 })
             }
-            const post = new Post({
-                _id: req.body.id,
-                title: req.body.title,
-                content: req.body.content,
-                imagePath: result.url
-            })
-            await Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
-                if (result.modifiedCount > 0) {
-                    console.log(result);
-                    res.status(200).json({ message: 'Post Updated successfull' })
-                } else {
-                    console.log(Error);
-                    res.status(401).json({ message: 'Unauthorized user' })
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
+            const oldPostDetails = await Post.findById(req.body.id)
+            oldPostDetails.title = req.body.title
+            oldPostDetails.content = req.body.content
+            oldPostDetails.imagePath = result.url
+            oldPostDetails.likes = oldPostDetails.likes
+            oldPostDetails.comments = oldPostDetails.comments
+
+            await oldPostDetails.save()
+                .then((result) => {
+                    // console.log(result);
+                    res.status(200).json({ message: 'Post updated successfully' });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.status(500).json({ message: 'An error occurred while updating the post' });
+                });
         })
     } else {
-        const post = new Post({
-            _id: req.body.id,
-            title: req.body.title,
-            content: req.body.content,
-            imagePath: req.body.imagePath
-        })
-        await Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
-            if (result.modifiedCount > 0) {
+        const oldPostDetails = await Post.findById(req.body.id)
+        oldPostDetails.title = req.body.title
+        oldPostDetails.content = req.body.content
+        oldPostDetails.imagePath = req.body.imagePath
+        oldPostDetails.likes = oldPostDetails.likes
+        oldPostDetails.comments = oldPostDetails.comments
+
+        await oldPostDetails.save()
+            .then((result) => {
                 // console.log(result);
-                res.status(200).json({ message: 'Post Updated successfull' })
-            } else {
-                console.log(Error);
-                res.status(401).json({ message: 'Unauthorized user' })
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
+                res.status(200).json({ message: 'Post updated successfully' });
+            })
+            .catch((error) => {
+                console.log(error);
+                res.status(500).json({ message: 'An error occurred while updating the post' });
+            });
+
+        // await Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
+        //     if (result.modifiedCount > 0) {
+        //         // console.log(result);
+        //         res.status(200).json({ message: 'Post Updated successfull' })
+        //     } else {
+        //         console.log(Error);
+        //         res.status(401).json({ message: 'Unauthorized user' })
+        //     }
+        // }).catch((err) => {
+        //     console.log(err);
+        // })
     }
 })
 
@@ -244,6 +254,25 @@ router.get('/:postId/comments', async (req, res) => {
     } catch (error) {
         console.error('Failed to retrieve comments', error);
         res.status(500).json({ error: 'Failed to retrieve comments' });
+    }
+})
+
+// get latest cmts of a post
+router.get('/:postId/comments/latest', async (req, res) => {
+    try {
+        const { postId } = req.params
+        const post = await Post.findById(postId)
+            .populate({
+                path: 'comments',
+                options: {
+                    sort: { _id: -1 } // Sort comments in descending order based on _id
+                }
+            });
+        const comments = post.comments
+        res.status(200).json(comments)
+    } catch (error) {
+        console.error('Failed to retrieve latest comments', error);
+        res.status(500).json({ error: 'Failed to retrieve latest comments' });
     }
 })
 
