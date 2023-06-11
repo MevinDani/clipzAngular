@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+// import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, AfterViewChecked, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
 import { Subscription } from 'rxjs';
@@ -13,6 +14,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit {
+  @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef | undefined;
+
+  // Rest of your component code
   constructor(private toastr: ToastrService, private ps: PostService, private ds: DataService, private fb: FormBuilder) { }
   isLoading = false
   isAuth: any
@@ -39,6 +43,7 @@ export class PostListComponent implements OnInit {
   openCmtBox: { [postId: number]: boolean } = {}
 
   comments: any = []
+  isCmtLoading = false
 
   ngOnInit(): void {
 
@@ -121,6 +126,18 @@ export class PostListComponent implements OnInit {
 
   }
 
+  // ngAfterViewChecked() {
+  //   this.scrollToBottom();
+  // }
+
+  private scrollToBottom() {
+    if (this.commentContainer) {
+      const containerElement = this.commentContainer.nativeElement;
+      containerElement.scrollTop = containerElement.scrollHeight;
+    }
+  }
+
+
   deletePost(postId: any) {
     this.ps.deletePost(postId)
   }
@@ -155,6 +172,7 @@ export class PostListComponent implements OnInit {
     // console.log('dislike code have to run');
   }
 
+
   cmntBox(id: any) {
     this.openCmtBox[id] = !this.openCmtBox[id]
   }
@@ -171,23 +189,54 @@ export class PostListComponent implements OnInit {
     const commPath = this.commentForm.value
     // console.log(id, commPath.comment, this.locUserId, this.userName);
     this.ps.addComment(id, commPath.comment, this.locUserId, this.userName).subscribe((result: any) => {
-      console.log(result);
+      // console.log(result);
       if (result.message == 'Comment added successfully') {
         this.toastr.success('Comment added successfully')
       }
     })
-    const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName }
+    const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date() }
     this.comments.push(newComm)
+    setTimeout(() => {
+      this.scrollToBottom();
+    });
+    // this.scrollToBottom();
     this.commentForm.reset()
   }
 
+  getTimeElapsed(createdAt: string): string {
+    const commentDate = new Date(createdAt);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
+
+    if (diff < 60) {
+      return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      const minutes = Math.floor(diff / 60);
+      return `${minutes} minutes ago`;
+    } else if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(diff / 86400);
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    }
+  }
+
   getComments(id: any) {
+    this.isCmtLoading = true
     this.comments = []
     this.ps.getComments(id).subscribe((result: any) => {
       console.log(result);
-      console.log(this.postProfPic);
-      this.comments = result
-      console.log(this.comments, 'comm');
+      // console.log(this.postProfPic);
+      // this.comments = result
+      this.comments = result.map((comment: any) => {
+        return {
+          ...comment,
+          createdAt: new Date(comment.createdAt)
+        };
+      })
+      this.isCmtLoading = false
+      // console.log(this.comments, 'comm');
     })
   }
 
