@@ -47,6 +47,8 @@ export class PostListComponent implements OnInit {
 
   toggleCmtBtn: any = {}
 
+  currentTime: Date = new Date();
+
   ngOnInit(): void {
 
     this.isLoading = true
@@ -55,7 +57,7 @@ export class PostListComponent implements OnInit {
       .subscribe((posts: Post[]) => {
         this.isLoading = false
         this.posts = posts
-        // console.log(posts);
+        // console.log(this.posts);
 
         for (let n of this.posts) {
           // console.log(n.name);
@@ -204,6 +206,25 @@ export class PostListComponent implements OnInit {
     // this.scrollToBottom();
     this.commentForm.reset()
   }
+
+  getTimeElapsed2(createdAt: string, currentTime: Date): string {
+    const commentDate = new Date(createdAt);
+    const diff = Math.floor((currentTime.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
+
+    if (diff < 60) {
+      return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      const minutes = Math.floor(diff / 60);
+      return `${minutes} minutes ago`;
+    } else if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(diff / 86400);
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    }
+  }
+
 
   getTimeElapsed(createdAt: string): string {
     const commentDate = new Date(createdAt);

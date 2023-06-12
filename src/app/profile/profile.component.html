@@ -38,7 +38,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div class="container" *ngFor="let p of userPost">
+        <div class="container post-cont" *ngFor="let p of userPost">
             <div>
                 <div class="usname" (click)="userProf(p.creator,p.name)">
                     <img *ngIf="postProfPic[p.name]" [src]="postProfPic[p.name]" class="upic">
@@ -78,6 +78,11 @@
                     <div (click)="cmntBox(p._id)" (click)="getComments(p._id)" class="cmts">
                         <i class="fa-regular fa-comment fa-lg"></i>
                     </div>
+                </div>
+                <div class="post-time-container">
+                    <p class="post-time" style="font-size: small;padding: 8px;">
+                        {{ getTimeElapsed2(p.lastUpdated,currentTime) }}
+                    </p>
                 </div>
             </div>
             <div *ngIf="openCmtBox[p._id]" class="mb-3 cmtBox">

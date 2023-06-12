@@ -26,7 +26,7 @@
     </div>
 </div>
 
-<div class="container" *ngFor="let p of posts">
+<div class="container post-cont" *ngFor="let p of posts">
     <div *ngIf="!isLoading">
         <div>
             <div class="usname" [routerLink]="['/profile/user',p.creator,p.name]">
@@ -74,6 +74,11 @@
             <div (click)="cmntBox(p.id)" (click)="getComments(p.id)" class="cmts">
                 <i class="fa-regular fa-comment fa-lg"></i>
             </div>
+        </div>
+        <div class="post-time-container">
+            <p class="post-time" style="font-size: small;padding: 8px;">
+                {{ getTimeElapsed2(p.lastUpdated,currentTime) }}
+            </p>
         </div>
     </div>
     <div *ngIf="openCmtBox[p.id]" class="mb-3 cmtBox">

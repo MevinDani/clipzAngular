@@ -210,7 +210,17 @@ svg:hover {
     position: relative;
 }
 
+.post-cont {
+    position: relative;
+}
+
 .comment-time-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.post-time-container {
     position: absolute;
     top: 0;
     right: 0;
@@ -248,6 +258,4 @@ svg:hover {
     margin-top: 50px;
 }
 
-.cmntDel {
-    
-}
+.cmntDel {}

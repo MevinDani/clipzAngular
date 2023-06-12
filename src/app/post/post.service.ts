@@ -43,6 +43,7 @@ export class PostService implements OnInit {
     getPosts() {
         this.http.get<{ message: string, posts: any }>('http://localhost:2000/api/posts')
             .pipe(map((postData) => {
+                // console.log(postData);
                 return postData.posts.map((post: any) => {
                     return {
                         title: post.title,
@@ -51,7 +52,8 @@ export class PostService implements OnInit {
                         imagePath: post.imagePath,
                         creator: post.creator,
                         name: post.name,
-                        likes: post.likes
+                        likes: post.likes,
+                        lastUpdated: post.lastUpdated
                     }
                 })
             }))
@@ -87,7 +89,8 @@ export class PostService implements OnInit {
                     imagePath: responseData.post.imagePath,
                     creator: responseData.post.creator,
                     name: responseData.post.name,
-                    likes: undefined
+                    likes: undefined,
+                    lastUpdated: undefined
                 }
                 console.log(post);
                 this.posts.push(post)
@@ -251,7 +254,7 @@ export class PostService implements OnInit {
         this.http.delete('http://localhost:2000/api/posts/' + postId + '/comments/' + cmntId)
             .subscribe((result: any) => {
                 if (result.message == 'Comment deleted successfully.') {
-                    this.toastr.warning('Comment deleted successfully.')
+                    this.toastr.info('Comment deleted successfully.')
                 } else {
                     this.toastr.error(result.message)
                     console.log(result);

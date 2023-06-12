@@ -293,3 +293,15 @@ svg:hover {
 .comments-wrapper {
     margin-top: 50px;
 }
+
+
+.post-cont {
+    position: relative;
+}
+
+
+.post-time-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

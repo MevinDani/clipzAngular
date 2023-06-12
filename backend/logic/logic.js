@@ -80,7 +80,7 @@ getUserN = async (name) => {
 
 getProfPost = async (id) => {
     console.log(id);
-    const post = await Post.find({ creator: id }).sort({ _id: -1 }).limit(100)
+    const post = await Post.find({ creator: id }).sort({ lastUpdated: -1 })
     // console.log(post);
     if (post) {
         return post
@@ -201,7 +201,7 @@ dislikePost = async (postId, userId) => {
 // get liked post
 getlikedPost = async (id) => {
     try {
-        const likedPosts = await Post.find({ likes: id }).sort({ _id: -1 })
+        const likedPosts = await Post.find({ likes: id }).sort({ lastUpdated: -1 })
         // console.log(likedPosts);
         if (likedPosts) {
             return likedPosts
@@ -220,7 +220,7 @@ getFollowingsPost = async (id) => {
             let userFollowings = []
             userFollowings = [...user.followings]
             // console.log(userFollowings);
-            const posts = await Post.find()
+            const posts = await Post.find().sort({ lastUpdated: -1 })
             posts.map(p => {
                 userFollowings.map(u => {
                     if (u == p.creator) {

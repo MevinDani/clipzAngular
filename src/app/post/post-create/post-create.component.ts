@@ -12,24 +12,24 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class PostCreateComponent implements OnInit {
 
-  post!:Post
+  post!: Post
   private postId!: string;
   mode = 'create'
   isLoading = false
-  imagePreview:any
+  imagePreview: any
   imageCheck = true
 
-  constructor(private fb:FormBuilder,public ps:PostService,private route:ActivatedRoute) {}
+  constructor(private fb: FormBuilder, public ps: PostService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params:Params) => {
-      if(params['postId']) {
+    this.route.params.subscribe((params: Params) => {
+      if (params['postId']) {
         this.mode = 'edit'
         this.postId = params['postId']
         this.isLoading = true
         this.ps.getPostEdit(this.postId).subscribe(postData => {
           this.isLoading = false
-          this.post = {id:postData._id,title:postData.title,content:postData.content,imagePath:postData.imagePath,creator:postData.creator,name:postData['name'],likes:undefined}
+          this.post = { id: postData._id, title: postData.title, content: postData.content, imagePath: postData.imagePath, creator: postData.creator, name: postData['name'], likes: undefined, lastUpdated: undefined }
           this.postForm.controls['title'].setValue(this.post.title)
           this.postForm.controls['content'].setValue(this.post.content)
           this.postForm.controls['image'].setValue(this.post.imagePath)
@@ -42,16 +42,16 @@ export class PostCreateComponent implements OnInit {
   }
 
   postForm = this.fb.group({
-    title:['',[Validators.required,Validators.minLength(3),Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
-    content:['',[Validators.required,Validators.minLength(4),Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
-    image:['',[Validators.required]]
+    title: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+    content: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+    image: ['', [Validators.required]]
   })
 
-  onImagePicked(event:Event) {
-    const file:any = (<HTMLInputElement>event.target).files
+  onImagePicked(event: Event) {
+    const file: any = (<HTMLInputElement>event.target).files
     const img = file[0]
-    if(img.type === 'image/jpeg' || img.type === 'image/png' || img.type ==='image/jpg' || img.type === 'image/x-png' || img.type === 'image/gif') {
-      this.postForm.patchValue({image: img})
+    if (img.type === 'image/jpeg' || img.type === 'image/png' || img.type === 'image/jpg' || img.type === 'image/x-png' || img.type === 'image/gif') {
+      this.postForm.patchValue({ image: img })
       this.postForm.get('image')?.updateValueAndValidity()
       const reader = new FileReader()
       reader.onload = () => {
@@ -63,21 +63,21 @@ export class PostCreateComponent implements OnInit {
       this.imageCheck = false
       this.postForm.get('image')?.updateValueAndValidity()
       this.imagePreview = ''
-      
+
     }
   }
 
   onAddPost() {
 
-    if(this.postForm.invalid) {
+    if (this.postForm.invalid) {
       return
     }
     const postFormPath = this.postForm.value
     this.isLoading = true
-    if(this.mode === 'create') {
-      this.ps.addPost(postFormPath.title,postFormPath.content,postFormPath.image)
+    if (this.mode === 'create') {
+      this.ps.addPost(postFormPath.title, postFormPath.content, postFormPath.image)
     } else {
-      this.ps.updatePost(this.postId,postFormPath.title,postFormPath.content,postFormPath.image)
+      this.ps.updatePost(this.postId, postFormPath.title, postFormPath.content, postFormPath.image)
     }
     this.postForm.reset()
   }

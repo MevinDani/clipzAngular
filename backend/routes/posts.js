@@ -33,7 +33,7 @@ const upload = require('../middleware/multer')
 router.get('', (req, res) => {
     Post.find().sort({ lastUpdated: -1 })
         .then((documents) => {
-            // console.log(documents)
+            console.log(documents)
             res.status(200).json({
                 message: 'Post fetched successfully',
                 posts: documents
@@ -54,11 +54,6 @@ router.post('', tokenMiddle, upload.single('image'), async (req, res) => {
                 message: 'Error'
             })
         }
-        // res.status(200).json({
-        //     success: true,
-        //     message: 'uploaded',
-        //     data: result
-        // })
         const user = await logic.getUser(req.userToken.userId)
         // console.log(user);
         const post = new Post({
@@ -68,6 +63,7 @@ router.post('', tokenMiddle, upload.single('image'), async (req, res) => {
             creator: req.userToken.userId,
             name: user.username,
         })
+        post.lastUpdated = new Date();
         post.save().then((createdPostId) => {
             res.status(201).json({
                 message: 'post added successfully',
@@ -104,6 +100,8 @@ router.put('/:id', tokenMiddle, upload.single('image'), async (req, res) => {
             oldPostDetails.likes = oldPostDetails.likes
             oldPostDetails.comments = oldPostDetails.comments
 
+            oldPostDetails.lastUpdated = new Date();
+
             await oldPostDetails.save()
                 .then((result) => {
                     // console.log(result);
@@ -121,7 +119,7 @@ router.put('/:id', tokenMiddle, upload.single('image'), async (req, res) => {
         oldPostDetails.imagePath = req.body.imagePath
         oldPostDetails.likes = oldPostDetails.likes
         oldPostDetails.comments = oldPostDetails.comments
-
+        oldPostDetails.lastUpdated = new Date();
         await oldPostDetails.save()
             .then((result) => {
                 // console.log(result);
@@ -132,17 +130,6 @@ router.put('/:id', tokenMiddle, upload.single('image'), async (req, res) => {
                 res.status(500).json({ message: 'An error occurred while updating the post' });
             });
 
-        // await Post.updateOne({ _id: req.params.id, creator: req.userToken.userId }, post).then((result) => {
-        //     if (result.modifiedCount > 0) {
-        //         // console.log(result);
-        //         res.status(200).json({ message: 'Post Updated successfull' })
-        //     } else {
-        //         console.log(Error);
-        //         res.status(401).json({ message: 'Unauthorized user' })
-        //     }
-        // }).catch((err) => {
-        //     console.log(err);
-        // })
     }
 })
 
