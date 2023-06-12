@@ -45,7 +45,7 @@ export class PostListComponent implements OnInit {
   comments: any = []
   isCmtLoading = false
 
-  toggleCmtBtn = false
+  toggleCmtBtn: any = {}
 
   ngOnInit(): void {
 
@@ -243,7 +243,7 @@ export class PostListComponent implements OnInit {
   }
 
   showLatestComments(id: any) {
-    this.toggleCmtBtn = true
+    this.toggleCmtBtn[id] = true
     // console.log(id);
     this.ps.getLatestComments(id).subscribe((result: any) => {
       // console.log(result);
@@ -257,7 +257,7 @@ export class PostListComponent implements OnInit {
   }
 
   showOldestComments(id: any) {
-    this.toggleCmtBtn = false
+    this.toggleCmtBtn[id] = false
     // this.getComments(id)
     this.ps.getComments(id).subscribe((result: any) => {
       // console.log(result);
@@ -272,6 +272,14 @@ export class PostListComponent implements OnInit {
       this.isCmtLoading = false
       // console.log(this.comments, 'comm');
     })
+  }
+
+  cmtDelete(postId: any, cmtId: any) {
+    // console.log(postId, cmtId);
+    this.ps.commentDelete(postId, cmtId)
+    // console.log(result);
+    // console.log(this.comments);
+    this.comments = this.comments.filter((id: any) => id._id !== cmtId)
   }
 
 

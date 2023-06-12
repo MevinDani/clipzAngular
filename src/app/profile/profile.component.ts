@@ -1,8 +1,10 @@
-import { Component, OnInit, DoCheck, OnChanges, SimpleChanges, AfterViewChecked, AfterContentInit, AfterContentChecked, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, DoCheck, OnChanges, SimpleChanges, AfterViewChecked, AfterContentInit, AfterContentChecked, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { PostService } from '../post/post.service';
 import { Subscription } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -43,11 +45,28 @@ export class ProfileComponent implements OnInit {
 
   inLikedPost = false
 
-  constructor(private route: ActivatedRoute, private ds: DataService, private ps: PostService, private router: Router) { }
+  openCmtBox: { [postId: number]: boolean } = {}
+
+  isCmtLoading = false
+
+  comments: any = []
+
+  toggleCmtBtn: any = {}
+
+
+
+  constructor(private toastr: ToastrService, private route: ActivatedRoute, private ds: DataService, private ps: PostService, private router: Router, private fb: FormBuilder) { }
+  @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef | undefined;
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.params['id']
     this.userName = this.route.snapshot.params['name']
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        window.location.reload();
+      }
+    });
 
     this.ds.getUser(this.userId).subscribe((result: any) => {
       // console.log(result);
@@ -100,20 +119,6 @@ export class ProfileComponent implements OnInit {
 
     })
 
-    // console.log(this.likes);
-
-    // Object.entries(this.likes).forEach(([key, value]) => {
-    //   // console.log(key, value);
-    //   // console.log(value);
-    //   for (let u of value) {
-    //     if (u == this.locUserId) {
-    //       this.logUserLikes[key] = true
-    //       this.postLikesNum[key] = value.length
-    //     }
-    //     this.postLikesNum[key] = value.length
-    //   }
-    // })
-
 
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
 
@@ -125,37 +130,15 @@ export class ProfileComponent implements OnInit {
   followUser(id: any) {
     // console.log(id);
     this.ps.apifollowUser(id)
-    // this.followId = id
-    // console.log(this.followId);
-    // console.log(typeof(this.followId));
-
-    // this.ds.apifollowUser(id)
-    // console.log(this.followArr);
-    // window.location.reload()
     this.followCheck = true
     this.followStatusChange.emit(true)
-    // this.followClick = !this.followClick
-    // this.ngOnInit()
   }
 
   unfollowUser(id: any) {
     // console.log(id);  
     this.ps.apiunfollowUser(id)
-    // this.unfollowId = id
-    // console.log(this.unfollowId);
-    // console.log(typeof(this.unfollowId));
-
-    // this.ds.apiunfollowUser(id)
-    // console.log(this.followArr);
-    // window.location.reload()
     this.followCheck = false
     this.followStatusChange.emit(false)
-    // const index = this.followArr.indexOf(id)
-    // console.log(index);
-    // this.followArr = this.followArr.splice(index,1)
-    // console.log(this.followArr,"splice");
-    // this.unfollowClick = !this.unfollowClick
-    // this.ngOnInit()
   }
 
 
@@ -298,6 +281,132 @@ export class ProfileComponent implements OnInit {
     this.ps.deletePost(postId)
     this.userPost = this.userPost.filter((post: any) => post._id !== postId)
   }
+
+  private scrollToBottom() {
+    if (this.commentContainer) {
+      const containerElement = this.commentContainer.nativeElement;
+      containerElement.scrollTop = containerElement.scrollHeight;
+    }
+  }
+
+  commentForm = this.fb.group({
+    comment: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+  })
+
+  commFormSubmit(id: any) {
+    if (this.commentForm.invalid) {
+      console.log('form invalid');
+      return
+    }
+    const commPath = this.commentForm.value
+    // console.log(id, commPath.comment, this.locUserId, this.userName);
+    this.ps.addComment(id, commPath.comment, this.locUserId, this.userName).subscribe((result: any) => {
+      // console.log(result);
+      if (result.message == 'Comment added successfully') {
+        this.toastr.success('Comment added successfully')
+      }
+    })
+    const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date() }
+    this.comments.push(newComm)
+    setTimeout(() => {
+      this.scrollToBottom();
+    });
+    // this.scrollToBottom();
+    this.commentForm.reset()
+  }
+
+  getTimeElapsed(createdAt: string): string {
+    const commentDate = new Date(createdAt);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
+
+    if (diff < 60) {
+      return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      const minutes = Math.floor(diff / 60);
+      return `${minutes} minutes ago`;
+    } else if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(diff / 86400);
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    }
+  }
+
+  getComments(id: any) {
+    this.isCmtLoading = true
+    this.comments = []
+    this.ps.getComments(id).subscribe((result: any) => {
+      // console.log(result);
+      // console.log(this.postProfPic);
+      // this.comments = result
+      this.comments = result.map((comment: any) => {
+        return {
+          ...comment,
+          createdAt: new Date(comment.createdAt)
+        };
+      })
+      this.isCmtLoading = false
+      // console.log(this.comments, 'comm');
+    })
+  }
+
+  showLatestComments(id: any) {
+    this.toggleCmtBtn[id] = true
+    // console.log(id);
+    this.ps.getLatestComments(id).subscribe((result: any) => {
+      // console.log(result);
+      this.comments = result.map((comment: any) => {
+        return {
+          ...comment,
+          createdAt: new Date(comment.createdAt)
+        };
+      })
+    })
+  }
+
+  showOldestComments(id: any) {
+    this.toggleCmtBtn[id] = false
+    // this.getComments(id)
+    this.ps.getComments(id).subscribe((result: any) => {
+      // console.log(result);
+      // console.log(this.postProfPic);
+      // this.comments = result
+      this.comments = result.map((comment: any) => {
+        return {
+          ...comment,
+          createdAt: new Date(comment.createdAt)
+        };
+      })
+      this.isCmtLoading = false
+      // console.log(this.comments, 'comm');
+    })
+  }
+
+  cmtDelete(postId: any, cmtId: any) {
+    // console.log(postId, cmtId);
+    this.ps.commentDelete(postId, cmtId)
+    // console.log(result);
+    // console.log(this.comments);
+    this.comments = this.comments.filter((id: any) => id._id !== cmtId)
+  }
+
+  cmntBox(id: any) {
+    this.openCmtBox[id] = !this.openCmtBox[id]
+    // console.log(id);
+    // console.log(this.openCmtBox);
+  }
+
+  userProf(id: any, name: any) {
+    // console.log(id, name);
+    if (id !== this.locUserId) {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigateByUrl('/profile/user/' + id + '/' + name);
+      });
+    }
+  }
+
 
   ngOnDestroy(): void {
     this.followSub.unsubscribe()

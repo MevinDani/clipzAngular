@@ -9,18 +9,18 @@ import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 const routes: Routes = [
-  { path:'', component:PostListComponent},
-  { path:'create', component:PostCreateComponent,canActivate:[AuthGuard]},
-  { path:'login', component:LoginComponent},
-  { path:'signup', component:SignupComponent},
-  { path:'editUser', component:EditProfileComponent},
-  { path:'edit/:postId', component:PostCreateComponent,canActivate:[AuthGuard]},
-  { path:'profile/user/:id/:name', component:ProfileComponent,canActivate:[AuthGuard]}
+  { path: '', component: PostListComponent },
+  { path: 'create', component: PostCreateComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'editUser', component: EditProfileComponent },
+  { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
+  { path: 'profile/user/:id/:name', component: ProfileComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule],
-  providers:[AuthGuard]
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }

@@ -276,4 +276,21 @@ router.get('/:postId/comments/latest', async (req, res) => {
     }
 })
 
+// delete a comment from post
+router.delete('/:postId/comments/:cmntId', async (req, res) => {
+    const { postId, cmntId } = req.params
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            { $pull: { comments: cmntId } },
+            { new: true }
+        )
+        await Comment.findByIdAndRemove(cmntId)
+        res.status(200).json({ message: "Comment deleted successfully." });
+    } catch (error) {
+        console.error("Error deleting comment:", error);
+        res.status(500).json({ error: "Error deleting comment" });
+    }
+})
+
 module.exports = router

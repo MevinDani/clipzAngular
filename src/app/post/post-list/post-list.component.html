@@ -85,9 +85,9 @@
         <!-- <label for="exampleFormControlTextarea1" class="form-label">Comments</label> -->
         <div class="cmtCont" #commentContainer>
             <div *ngIf="comments.length > 0" class="cmtLatBtn">
-                <button *ngIf="!toggleCmtBtn" (click)="showLatestComments(p.id)" class="btn btn-warning">show
+                <button *ngIf="!toggleCmtBtn[p.id]" (click)="showLatestComments(p.id)" class="btn btn-warning">show
                     latest</button>
-                <button *ngIf="toggleCmtBtn" (click)="showOldestComments(p.id)" class="btn btn-primary">show
+                <button *ngIf="toggleCmtBtn[p.id]" (click)="showOldestComments(p.id)" class="btn btn-primary">show
                     oldest</button>
             </div>
             <div class="comments-wrapper">
@@ -101,8 +101,9 @@
                         </div>
                         <p class="card-text">{{c.content}}</p>
                         <div *ngIf="c.userId == locUserId">
-                            <button class="btn btn-danger cmntDel" style="font-size: 10px;">Delete</button>
-                            <button class="btn btn-info cmntDel" style="font-size: 10px;">Edit</button>
+                            <button (click)="cmtDelete(p.id,c._id)" class="btn btn-danger cmntDel"
+                                style="font-size: 10px;">Delete</button>
+                            <!-- <button class="btn btn-info cmntDel" style="font-size: 10px;">Edit</button> -->
                         </div>
                     </div>
                     <div class="comment-time-container">

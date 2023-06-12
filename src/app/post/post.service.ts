@@ -247,4 +247,16 @@ export class PostService implements OnInit {
         return this.http.get('http://localhost:2000/api/posts/' + id + '/comments/latest')
     }
 
+    commentDelete(postId: any, cmntId: any) {
+        this.http.delete('http://localhost:2000/api/posts/' + postId + '/comments/' + cmntId)
+            .subscribe((result: any) => {
+                if (result.message == 'Comment deleted successfully.') {
+                    this.toastr.warning('Comment deleted successfully.')
+                } else {
+                    this.toastr.error(result.message)
+                    console.log(result);
+                }
+            })
+    }
+
 }

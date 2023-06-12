@@ -73,15 +73,15 @@
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
-.uname {
+/* .uname {
     background-color: rgb(255, 164, 131);
     border-radius: 10px;
     padding: 5px;
-    /* cursor: pointer; */
+    cursor: pointer;
     font-size: 15px;
     font-weight: bold;
     width: max-content;
-}
+} */
 
 .uname span {
     margin-left: 8px;
@@ -127,3 +127,169 @@ svg {
 /* .uname:hover {
     background-color: coral;
 } */
+
+/*  */
+/*  */
+/*  */
+
+.btns {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cpic {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.usname {
+    background-color: coral;
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    width: max-content;
+}
+
+.cmtCont {
+    background-color: rgb(190, 255, 233);
+    padding: 5px;
+    border-radius: 12px;
+}
+
+.singCmt {
+    background-color: white;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.cmts {
+    cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+.cmts:hover {
+    transform: scale(1.2);
+}
+
+.cmtCont {
+    background-color: rgb(190, 255, 233);
+    padding: 5px;
+    border-radius: 12px;
+}
+
+.singCmt {
+    background-color: white;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.usname span {
+    margin-left: 8px;
+}
+
+.usname:hover {
+    background-color: rgb(255, 166, 134);
+}
+
+.like {
+    cursor: pointer;
+}
+
+.liked {
+    color: red;
+    cursor: pointer;
+}
+
+svg {
+    cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+svg:hover {
+    transform: scale(1.2);
+}
+
+.lkdis {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.likeDis {
+    /* background-color: aquamarine; */
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.cmts {
+    cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+.cmts:hover {
+    transform: scale(1.2);
+}
+
+.cmtCont {
+    height: 300px;
+    /* Adjust the height as per your needs */
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+}
+
+.singCmt {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.singCmt>div:last-child {
+    margin-right: 0;
+    /* Removes extra margin on the right for the last comment */
+}
+
+.singCmt {
+    position: relative;
+}
+
+.comment-time-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.comment-container {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    /* Enables smooth scrolling */
+}
+
+.comment-list {
+    display: inline-block;
+}
+
+.cmtCont {
+    position: relative;
+}
+
+.cmtLatBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    z-index: 1;
+}
+
+.singCmt.first-comment {
+    margin-top: 50px;
+}
+
+.comments-wrapper {
+    margin-top: 50px;
+}
