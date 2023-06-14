@@ -17,6 +17,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { CommentsComponent } from './comments/comments.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { CommentsComponent } from './comments/comments.component';
     ProfileComponent,
     SidebarComponent,
     EditProfileComponent,
-    CommentsComponent
+    CommentsComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

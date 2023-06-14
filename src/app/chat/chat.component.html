@@ -1,0 +1,66 @@
+<div class="chat-container">
+    <div class="chat-list">
+        <div>
+            <h5>Friends</h5>
+        </div>
+        <ul class="list-group" *ngFor="let i of freinds">
+            <li (click)="selectChatUser(i)" class="list-group-item">
+                <img [src]="[freindProfPic[i]]" alt="" class="freindProfPic">
+                <span class="chatSpan">{{i}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="message">
+        <div class="card">
+            <div class="card-header">
+                <img *ngIf="selectedUserDetails['name']" [src]="[freindProfPic[selectedUserDetails['name']]]" alt=""
+                    class="freindProfPic">
+                <span class="chatSpan">{{selectedUserDetails['name']}}</span>
+            </div>
+            <div class="mb-3 cmtBox">
+                <!-- <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div> -->
+                <!-- <label for="exampleFormControlTextarea1" class="form-label">Comments</label> -->
+                <div class="cmtCont" #commentContainer>
+                    <div class="comments-wrapper">
+                        <div class="d-flex flex-column m-2 singCmt" *ngFor="let c of conversations">
+                            <!-- <img src="..." class="card-img-top" alt="..."> -->
+                            <!-- <div *ngIf="comments.length===0">No Comments, add your comment</div> -->
+                            <div>
+                                <div class="usname" [routerLink]="['/profile/user',c.userId,c.name]">
+                                    <img class="cpic" [src]="[freindProfPicId[c.sender]]">
+                                    <span class="uname"></span>
+                                </div>
+                                <p class="card-text">{{c.message}}</p>
+                                <div *ngIf="c.sender == locUserId">
+                                    <button (click)="deleteConv(c._id,c.sender)" class="btn btn-danger cmntDel"
+                                        style="font-size: 10px;">Delete</button>
+                                </div>
+                            </div>
+                            <div class="comment-time-container">
+                                <p class="comment-time" style="font-size: small;padding: 8px;">
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form [formGroup]="messageForm" (ngSubmit)="messageSubmit()"
+                    class="d-flex flex-column align-items-center">
+                    <textarea formControlName="message" id="comment" name="comment" class="form-control mt-5"
+                        placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1"
+                        rows="1"></textarea>
+                    <div *ngIf="(this.messageForm.get('message')?.errors)&&(this.messageForm.get('message')?.touched)">
+                        <p class="text-danger">Minimum 3 characters required</p>
+                    </div>
+                    <button class="btn btn-success mt-2" style="height: 30px;">
+                        <p style="font-size: small;">Send</p>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

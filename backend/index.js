@@ -2,8 +2,14 @@ const express = require('express')
 const mongoose = require('mongoose')
 const postRoutes = require('./routes/posts')
 const userRoutes = require('./routes/user')
+const conversationRoutes = require('./routes/conversation')
+const messageRoutes = require('./routes/message')
+const http = require('http');
+const socketIO = require('socket.io');
 // const cors = require('cors')
 const app = express()
+const server = http.createServer(app);
+const io = socketIO(server);
 
 // app.use(cors({ origin: 'http://localhost:4200' }))
 
@@ -33,4 +39,25 @@ app.use((req, res, next) => {
 
 app.use('/api/posts', postRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/conversations', conversationRoutes)
+app.use('/api/messages', messageRoutes)
+
+
+// Socket.IO connection handling
+// io.on('connection', (socket) => {
+//     console.log('A user connected');
+
+//     // Handle socket events here
+
+//     // Handle disconnection
+//     socket.on('disconnect', () => {
+//         console.log('A user disconnected');
+//     });
+// });
+
+// // Start the server
+// const port = 2000;
+// server.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+// });
 

@@ -79,7 +79,7 @@ getUserN = async (name) => {
 }
 
 getProfPost = async (id) => {
-    console.log(id);
+    // console.log(id);
     const post = await Post.find({ creator: id }).sort({ lastUpdated: -1 })
     // console.log(post);
     if (post) {

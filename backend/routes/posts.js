@@ -33,7 +33,7 @@ const upload = require('../middleware/multer')
 router.get('', (req, res) => {
     Post.find().sort({ lastUpdated: -1 })
         .then((documents) => {
-            console.log(documents)
+            // console.log(documents)
             res.status(200).json({
                 message: 'Post fetched successfully',
                 posts: documents
@@ -164,7 +164,7 @@ router.delete('/:id', tokenMiddle, (req, res) => {
 // get profile posts
 router.get('/profile/:id', (req, res) => {
     logic.getProfPost(req.params.id).then(result => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result)
     }).catch(err => {
         console.log(err);

@@ -258,4 +258,6 @@ svg:hover {
     margin-top: 50px;
 }
 
-.cmntDel {}
+.highlight {
+    background-color: rgb(162, 215, 255);
+}

@@ -262,4 +262,41 @@ export class PostService implements OnInit {
             })
     }
 
+    getConversations(userId: any) {
+        return this.http.get('http://localhost:2000/api/conversations/' + userId)
+    }
+
+    getMessages(conversationId: any) {
+        return this.http.get('http://localhost:2000/api/messages/' + conversationId)
+    }
+
+    setConversationId(senderId: any, receiverId: any) {
+        const body = {
+            senderId, receiverId
+        }
+        return this.http.post('http://localhost:2000/api/conversations/', body)
+    }
+
+    sendMessage(conversationId: any, sender: any, receiver: any, message: any) {
+        const body = {
+            conversationId,
+            sender,
+            receiver,
+            message
+        }
+        return this.http.post('http://localhost:2000/api/messages/', body)
+    }
+
+    deleteMessage(messageId: any, senderId: any) {
+        return this.http.delete('http://localhost:2000/api/messages/' + messageId + '/' + senderId)
+            .subscribe((result: any) => {
+                if (result.message == 'Message deleted successfully') {
+                    this.toastr.success('Message deleted successfully')
+                } else {
+                    this.toastr.error(result.message)
+                    console.log(result);
+                }
+            })
+    }
+
 }
