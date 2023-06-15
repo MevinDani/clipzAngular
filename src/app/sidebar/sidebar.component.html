@@ -1,25 +1,27 @@
-<!-- <div class="mt-5">
-    <ul *ngFor="let f of followers" class="list-group">
-        <li class="list-group-item"></li>
-    </ul>
-</div> -->
-
 <div class="card mt-5">
     <div class="fhead">Followers</div>
-    <ul *ngFor="let f of followers" class="list-group list-group-flush">
-        <li (click)="userProf(f)" class=" list-group-item">{{f}}</li>
+    <ul (click)="userProf(f)" *ngFor="let f of followers"
+        class="list-group list-group-flush d-flex flex-row align-items-center ps-3">
+        <img *ngIf="followerPics[f]" [src]="[followerPics[f]]" class="sideImgs">
+        <li class=" list-group-item">{{f}}</li>
     </ul>
 </div>
 
 <div *ngIf="locUserId == userId" class="card mt-5">
     <div class="fhead">Followings</div>
-    <ul *ngFor="let g of followings" class="list-group list-group-flush">
-        <li (click)="userProf(g)" class=" list-group-item">{{g}}</li>
+    <ul (click)="userProf(g)" *ngFor="let g of followings"
+        class="list-group list-group-flush d-flex flex-row align-items-center ps-3">
+        <img *ngIf="followingsPics[g]" [src]="[followingsPics[g]]" class="sideImgs">
+        <li class=" list-group-item">{{g}}</li>
     </ul>
 </div>
 
-<!-- <div class="mt-5">
-    <ul *ngFor="let g of followings" class="list-group">
-        <li class="list-group-item">{{g}}</li>
+<div *ngIf="locUserId == userId" class="card mt-5">
+    <div class="fhead">Freinds</div>
+    <ul (click)="userProf(r)" *ngFor="let r of freindsName"
+        class="list-group list-group-flush d-flex flex-row align-items-center ps-3">
+        <img *ngIf="freindsPics[r]" [src]="[freindsPics[r]]" class="sideImgs">
+        <li class=" list-group-item">{{r}}</li>
     </ul>
-</div> -->
+    <div class="chat-container" routerLink="/chat"><span class="chat">Chat with Freinds!</span></div>
+</div>

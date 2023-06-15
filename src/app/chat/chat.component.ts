@@ -22,6 +22,8 @@ export class ChatComponent implements OnInit {
   chatUserId: any
   socket!: Socket;
   conversations: any = []
+  isLoading!: boolean;
+  chatUsersDetails: any = {}
 
   constructor(private ds: DataService, private ps: PostService, private fb: FormBuilder) { }
 
@@ -87,13 +89,13 @@ export class ChatComponent implements OnInit {
 
     // Handle incoming messages
     this.socket.on('welcome', (data: any) => {
-      console.log('Received message:', data);
+      // console.log('Received message:', data);
     });
 
     // adduserid
     this.socket.emit('addUser', this.locUserId)
     this.socket.on('getUsers', users => {
-      console.log(users, 'usersockid');
+      // console.log(users, 'usersockid');
     })
 
   }
@@ -106,6 +108,7 @@ export class ChatComponent implements OnInit {
   }
 
   selectChatUser(name: any) {
+    this.isLoading = true
     this.selectedUserDetails['name'] = name;
     // console.log(this.selectedUserDetails);
 
@@ -119,7 +122,13 @@ export class ChatComponent implements OnInit {
         this.ps.getMessages(this.conversationId).subscribe((result: any) => {
           // console.log(result);
           this.conversations = result
-          console.log(this.conversations);
+          // console.log(this.conversations);
+          this.conversations.map((i: any) => {
+            this.ds.getUser(i.sender).subscribe((result: any) => {
+              this.chatUsersDetails[result._id] = result.username
+              // console.log(this.chatUsersDetails);
+            })
+          })
           setTimeout(() => {
             this.scrollToBottom();
           });
@@ -129,8 +138,10 @@ export class ChatComponent implements OnInit {
 
     // this.ps.setConversationId(this.locUserId,)
     this.ps.getConversations(this.locUserId).subscribe((result: any) => {
-      console.log(result);
+      // console.log(result);
     })
+
+    this.isLoading = false
   }
 
   messageForm = this.fb.group({
@@ -141,8 +152,8 @@ export class ChatComponent implements OnInit {
     if (this.messageForm.valid) {
 
       const msgPath = this.messageForm.value
-      console.log(this.messageForm.value);
-      console.log(this.locUserId, this.chatUserId);
+      // console.log(this.messageForm.value);
+      // console.log(this.locUserId, this.chatUserId);
 
       // socket send
       this.socket.emit('sendMessage', {
@@ -153,7 +164,7 @@ export class ChatComponent implements OnInit {
 
       this.ps.sendMessage(this.conversationId, this.locUserId, this.chatUserId, msgPath.message)
         .subscribe((result: any) => {
-          console.log(result);
+          // console.log(result);
         })
 
       const newConv = {
@@ -175,7 +186,7 @@ export class ChatComponent implements OnInit {
 
   deleteConv(messageId: any, senderId: any) {
     this.ps.deleteMessage(messageId, senderId)
-    console.log(this.chatUserId, messageId, senderId);
+    // console.log(this.chatUserId, messageId, senderId);
 
     this.conversations = this.conversations.filter((i: any) => i._id !== messageId)
     // socket msg delete

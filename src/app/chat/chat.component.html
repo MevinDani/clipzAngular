@@ -11,7 +11,7 @@
         </ul>
     </div>
     <div class="message">
-        <div class="card">
+        <div class="card" style="height: max-content;">
             <div class="card-header">
                 <img *ngIf="selectedUserDetails['name']" [src]="[freindProfPic[selectedUserDetails['name']]]" alt=""
                     class="freindProfPic">
@@ -25,14 +25,21 @@
                 </div> -->
                 <!-- <label for="exampleFormControlTextarea1" class="form-label">Comments</label> -->
                 <div class="cmtCont" #commentContainer>
-                    <div class="comments-wrapper">
-                        <div class="d-flex flex-column m-2 singCmt" *ngFor="let c of conversations">
+                    <div class="comments-wrapper d-flex flex-column" style="height: 100%;">
+                        <div class="d-flex justify-content-center" *ngIf="isLoading">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="m-2 singCmt" *ngFor="let c of conversations"
+                            [ngClass]="{'highlight': c.sender == locUserId,'comment-right': c.sender == locUserId, 'comment-left': c.sender != locUserId}">
                             <!-- <img src="..." class="card-img-top" alt="..."> -->
                             <!-- <div *ngIf="comments.length===0">No Comments, add your comment</div> -->
                             <div>
-                                <div class="usname" [routerLink]="['/profile/user',c.userId,c.name]">
+                                <div class="usname"
+                                    [routerLink]="['/profile/user',c.sender,chatUsersDetails[c.sender]]">
                                     <img class="cpic" [src]="[freindProfPicId[c.sender]]">
-                                    <span class="uname"></span>
+                                    <span class="uname">{{chatUsersDetails[c.sender]}}</span>
                                 </div>
                                 <p class="card-text">{{c.message}}</p>
                                 <div *ngIf="c.sender == locUserId">
@@ -51,8 +58,8 @@
                 <form [formGroup]="messageForm" (ngSubmit)="messageSubmit()"
                     class="d-flex flex-column align-items-center">
                     <textarea formControlName="message" id="comment" name="comment" class="form-control mt-5"
-                        placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1"
-                        rows="1"></textarea>
+                        placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1" rows="1"
+                        style="margin-top: 20px;"></textarea>
                     <div *ngIf="(this.messageForm.get('message')?.errors)&&(this.messageForm.get('message')?.touched)">
                         <p class="text-danger">Minimum 3 characters required</p>
                     </div>

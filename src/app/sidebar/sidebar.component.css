@@ -20,7 +20,38 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
+
+ul:hover {
+    cursor: pointer;
+    color: rgb(255, 68, 0) !important
+}
+
 li:hover {
     cursor: pointer;
     color: rgb(255, 68, 0);
+}
+
+.sideImgs {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+.chat-container {
+    padding: 10px;
+    text-align: center;
+}
+
+.chat {
+    padding: 5px;
+    background-color: rgb(103, 255, 255);
+    color: black;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.chat:hover {
+    background-color: cyan;
+    font-size: 18px;
+    transition: all .1s ease-in;
 }

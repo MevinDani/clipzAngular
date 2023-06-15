@@ -30,6 +30,16 @@ export class SidebarComponent implements OnInit, DoCheck, OnDestroy {
   routeId: any
   routeName: any
 
+  freindsId: any = []
+  freindsName: any = []
+  freindsDetails: any = []
+  freindsPics: any = {}
+  followerPics: any = {}
+  followingsPics: any = {}
+
+  followersName: any = []
+  followingsName: any = []
+
   // @Input() followNum:any
   // @Input() unfollowNum:any
   @Input() statChng: any
@@ -65,41 +75,6 @@ export class SidebarComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   // if (changes['followNum'] && changes['unfollowNum']) {
-  //   //   const currentValueFollow = changes['followNum'].currentValue;
-  //   //   const previousValueFollow = changes['followNum'].previousValue;
-
-  //   //   const currentValueUnfollow = changes['followNum'].currentValue;
-  //   //   const previousValueUnfollow = changes['followNum'].previousValue;
-
-  //   //   // console.log(currentValueFollow,previousValueFollow);
-  //   //   // console.log(currentValueUnfollow,previousValueUnfollow);
-
-  //   //   // React to changes in the input property
-  //   //   // Perform necessary actions based on currentValue and previousValue
-  //   // }
-  //   // console.log(this.statChng);
-
-  //   // console.log(this.followNum,this.unfollowNum);
-  //   console.log(this.followStatus);
-
-  //   if(this.followStatus && (!this.followers.includes(this.locUname))) {
-  //     this.followers.push(this.locUname)
-  //     console.log(this.followers,"inloop if");
-  //     // this.followNum = ''
-  //     console.log(this.statChng,"followempty");
-
-  //   }
-  //   if(this.followStatus && (this.followers.includes(this.locUname))) {
-  //     this.followers = this.followers.filter((fid:any) => fid !== this.locUname)
-  //     console.log(this.followers);
-  //     console.log(this.followers,"inloop else");
-  //     // this.unfollowNum = ''
-  //     console.log(!this.statChng,"unflempty");
-
-  //   }
-  // }
 
   ngOnInit(): void {
 
@@ -117,15 +92,47 @@ export class SidebarComponent implements OnInit, DoCheck, OnDestroy {
 
     // get logUserName
     this.ds.getUser(this.locUserId).subscribe((result: any) => {
-      // console.log((result));
+      // console.log(result);
       this.locUname = result.username
-      // console.log(this.locUname);
+      const followersId: [] = result.followers
+      const followingsId: [] = result.followings
+      this.followersName = result.followersName
+      this.followingsName = result.followingsName
+      this.freindsId = followersId.filter(element => followingsId.includes(element))
+      this.freindsName = this.followersName.filter((element: any) => this.followingsName.includes(element))
+      // console.log(this.freindsName);
+      this.freindsId.map((i: any) => {
+        this.ds.getUser(i).subscribe((result: any) => {
+          // console.log(result);
+          this.freindsPics[result.username] = result.profilePic
+          // console.log(this.freindsDetails);
+          // console.log(this.freindsPics);
+        })
+      })
+      // this.freindsName.map((i: any) => {
+      //   this.ds.getProfPic(i).subscribe((result: any) => {
+      //     this.freindProfPic[i] = result
+      //     console.log(this.freindProfPic);
+      //   })
+      // })
     })
 
     this.ds.getUser(this.userId).subscribe((result: any) => {
       // console.log(result);
       this.followers = result.followersName
       this.followings = result.followingsName
+
+      this.followers.map((i: any) => {
+        this.ds.getProfPic(i).subscribe((result: any) => {
+          this.followerPics[i] = result
+        })
+      })
+
+      this.followings.map((i: any) => {
+        this.ds.getProfPic(i).subscribe((result: any) => {
+          this.followingsPics[i] = result
+        })
+      })
       // console.log(this.followers,"ngonit");
     })
 
