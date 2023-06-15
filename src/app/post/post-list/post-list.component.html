@@ -38,7 +38,7 @@
             <p>{{ p.title }}</p>
         </div>
         <div class="img">
-            <img [src]="p.imagePath" [alt]="p.title" style="max-height: 800px;">
+            <img [src]="p.imagePath" [alt]="p.title">
         </div>
         <div class="content mt-2">
             <p>{{ p.content }}</p>
@@ -89,9 +89,9 @@
                 <button *ngIf="toggleCmtBtn[p.id]" (click)="showOldestComments(p.id)" class="btn btn-primary">show
                     oldest</button>
             </div>
-            <div class="comments-wrapper">
-                <div class="d-flex flex-column m-2 singCmt" *ngFor="let c of comments;let first = first"
-                    [ngClass]="{'highlight': c.userId === locUserId}">
+            <div class="comments-wrapper d-flex flex-column">
+                <div class="m-2 singCmt" *ngFor="let c of comments;let first = first"
+                    [ngClass]="{'highlight': c.userId === locUserId, 'comment-right': c.userId == locUserId, 'comment-left': c.userId != locUserId}">
                     <!-- <img src="..." class="card-img-top" alt="..."> -->
                     <div *ngIf="comments.length===0">No Comments, add your comment</div>
                     <div *ngIf="comments.length>0" [ngClass]="{'first-comment': first}">

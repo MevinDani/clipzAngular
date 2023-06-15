@@ -31,18 +31,18 @@
         </div>
     </div>
 </nav>
-<div *ngIf="locUserId && showProfileSection" class="container prof-cont">
-    <div class="card">
+<div *ngIf="showProfileSection" class="container prof-cont">
+    <div class="card mt-2">
         <div class="prof-pic">
             <img src={{profilePic}} class="selImg">
         </div>
         <div class=" card-body">
             <h5 class="card-title text-center">{{userName}}</h5>
             <div class="prof-btns">
-                <button [routerLink]="['/profile/user']" class="btn btn-primary">
+                <button [routerLink]="['/profile/user',locUserId,userName]" (click)="profile()" class="btn btn-primary">
                     View Profile
                 </button>
-                <button (click)="logout()" class="btn btn-success">
+                <button (click)="logout()" class="btn btn-danger">
                     Log Out
                 </button>
             </div>

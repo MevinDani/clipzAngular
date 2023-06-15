@@ -12,24 +12,28 @@ nav {
 }
 
 .selImg {
-    height: 100px;
-    width: 100px;
+    height: 200px;
+    width: 200px;
+    border-radius: 12px;
 }
 
 .card {
     border: none;
-    /* background-color: rgb(255, 174, 144); */
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 174, 144);
+background-color: rgb(255, 255, 255); */
+    /* background-color: rgb(0, 255, 170); */
+    background-color: aliceblue;
 }
 
 .prof-cont {
     /* background-color: rgb(255, 174, 144); */
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(0, 255, 170); */
+    background-color: aliceblue;
+    /* background-color: rgb(255, 255, 255); */
     width: 20%;
     border-radius: 12px;
     position: absolute;
     right: 0;
-    top: 15;
     z-index: 1;
 }
 

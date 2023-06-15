@@ -22,18 +22,18 @@ export class HeaderComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     this.authService.getToken().subscribe((result: any) => {
       this.token = result;
-      console.log(this.token);
+      // console.log(this.token);
       this.ds.getUser(this.token).subscribe((result: any) => {
-        console.log(result);
+        // console.log(result);
         this.profilePic = result.profilePic
         this.userName = result.username
       })
     });
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
-    console.log(this.locUserId);
+    // console.log(this.locUserId);
     if (this.locUserId) {
       this.ds.getUser(this.locUserId).subscribe((result: any) => {
-        console.log(result);
+        // console.log(result);
         this.profilePic = result.profilePic
         this.userName = result.username
       })
@@ -56,6 +56,12 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   toggleProfileSection() {
+    // console.log(this.showProfileSection);
+    this.showProfileSection = !this.showProfileSection;
+  }
+
+  profile() {
+    // this.route.navigateByUrl(`/profile/users/${this.token}/${this.userName}`)
     this.showProfileSection = !this.showProfileSection;
   }
 

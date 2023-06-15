@@ -164,22 +164,19 @@ export class ChatComponent implements OnInit {
 
       this.ps.sendMessage(this.conversationId, this.locUserId, this.chatUserId, msgPath.message)
         .subscribe((result: any) => {
-          // console.log(result);
+          console.log(result);
+          const newConv = {
+            _id: result._id,
+            sender: this.locUserId,
+            message: msgPath.message
+          }
+          this.conversations.push(newConv)
+          setTimeout(() => {
+            this.scrollToBottom();
+          });
         })
 
-      const newConv = {
-        sender: this.locUserId,
-        message: msgPath.message
-      }
-
-      this.conversations.push(newConv)
-
-      setTimeout(() => {
-        this.scrollToBottom();
-      });
-
       this.messageForm.reset()
-
     }
 
   }
