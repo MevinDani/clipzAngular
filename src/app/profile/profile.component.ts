@@ -484,6 +484,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  sendUname(name: any) {
+    console.log(name);
+    this.ps.setSelectedUser(name)
+  }
+
 
   ngOnDestroy(): void {
     this.followSub.unsubscribe()

@@ -5,7 +5,8 @@
         </div>
         <ul class="list-group" *ngFor="let i of freinds">
             <li (click)="selectChatUser(i)" class="list-group-item">
-                <img [src]="[freindProfPic[i]]" alt="" class="freindProfPic">
+                <img [src]="freindProfPic[i] ? freindProfPic[i]: 'https://i.postimg.cc/t4S4SHmg/1053244.png'" alt=""
+                    class="freindProfPic">
                 <span class="chatSpan">{{i}}</span>
             </li>
         </ul>
@@ -13,8 +14,8 @@
     <div class="message">
         <div class="card" style="height: max-content;">
             <div class="card-header">
-                <img *ngIf="selectedUserDetails['name']" [src]="[freindProfPic[selectedUserDetails['name']]]" alt=""
-                    class="freindProfPic">
+                <img [src]="freindProfPic[selectedUserDetails['name']] ? freindProfPic[selectedUserDetails['name']]: 'https://i.postimg.cc/t4S4SHmg/1053244.png'"
+                    alt="" class="freindProfPic">
                 <span class="chatSpan">{{selectedUserDetails['name']}}</span>
             </div>
             <div class="mb-3 cmtBox">
@@ -26,6 +27,11 @@
                 <!-- <label for="exampleFormControlTextarea1" class="form-label">Comments</label> -->
                 <div class="cmtCont" #commentContainer>
                     <div class="comments-wrapper d-flex flex-column" style="height: 100%;">
+                        <div *ngIf="chatImgContView" class="chatImgCont">
+                            <span class="text-primary">
+                                <img class="chatImg" src="https://i.postimg.cc/4N0zcz4n/live-chat-icon.png" alt="">
+                            </span>
+                        </div>
                         <div class="d-flex justify-content-center" *ngIf="isLoading">
                             <div class="spinner-border text-primary" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -38,7 +44,8 @@
                             <div>
                                 <div class="usname"
                                     [routerLink]="['/profile/user',c.sender,chatUsersDetails[c.sender]]">
-                                    <img class="cpic" [src]="[freindProfPicId[c.sender]]">
+                                    <img class="cpic"
+                                        [src]="freindProfPicId[c.sender] ? freindProfPicId[c.sender] : 'https://i.postimg.cc/t4S4SHmg/1053244.png'">
                                     <span class="uname">{{chatUsersDetails[c.sender]}}</span>
                                 </div>
                                 <p class="card-text">{{c.message}}</p>

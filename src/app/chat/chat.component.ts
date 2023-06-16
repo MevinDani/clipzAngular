@@ -25,6 +25,9 @@ export class ChatComponent implements OnInit {
   conversations: any = []
   isLoading!: boolean;
   chatUsersDetails: any = {}
+  chatImgContView!: boolean;
+
+  selectedUser: any
 
   constructor(private ds: DataService, private ps: PostService, private fb: FormBuilder) { }
 
@@ -84,11 +87,6 @@ export class ChatComponent implements OnInit {
       this.conversations = this.conversations.filter((i: any) => i._id !== msgId)
     })
 
-    // Connect to the server
-    // this.socket.on('connect', () => {
-    //   console.log('Connected to the server');
-    // });
-
     // Handle incoming messages
     this.socket.on('welcome', (data: any) => {
       // console.log('Received message:', data);
@@ -100,6 +98,15 @@ export class ChatComponent implements OnInit {
       // console.log(users, 'usersockid');
     })
 
+    this.chatImgContView = true
+
+    this.ps.getSelectedUser().subscribe(user => {
+      console.log(user);
+      this.selectedUser = user;
+      this.selectChatUser(user)
+      // Handle the selected user in the chat component
+    });
+
   }
 
   private scrollToBottom() {
@@ -110,6 +117,7 @@ export class ChatComponent implements OnInit {
   }
 
   selectChatUser(name: any) {
+    this.chatImgContView = false
     this.chatUsersDetails[this.locUserId] = this.locUsername
     this.isLoading = true
     this.selectedUserDetails['name'] = name;
@@ -129,7 +137,7 @@ export class ChatComponent implements OnInit {
           this.conversations.map((i: any) => {
             this.ds.getUser(i.sender).subscribe((result: any) => {
               this.chatUsersDetails[result._id] = result.username
-              console.log(this.chatUsersDetails);
+              // console.log(this.chatUsersDetails);
             })
           })
           setTimeout(() => {

@@ -318,4 +318,16 @@ export class PostService implements OnInit {
         return this.http.get('http://localhost:2000/api/posts/profile/' + id)
     }
 
+
+    // chat live user select
+    private selectedUserSubject = new BehaviorSubject<string>('');
+
+    setSelectedUser(user: string): void {
+        this.selectedUserSubject.next(user);
+    }
+
+    getSelectedUser(): Observable<string> {
+        return this.selectedUserSubject.asObservable();
+    }
+
 }

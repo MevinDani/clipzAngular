@@ -6,7 +6,8 @@
                 <ul class="navbar-nav">
                     <li class="nav-item" *ngIf="isAuth">
                         <a class="navbar-brand" style="color:white" (click)="toggleProfileSection()">
-                            <img src={{profilePic}} class="headImg" style="cursor: pointer;">
+                            <img [src]="profilePic ? profilePic : 'https://i.postimg.cc/t4S4SHmg/1053244.png'"
+                                class="headImg" style="cursor: pointer;">
                         </a>
                     </li>
                 </ul>
@@ -31,7 +32,8 @@
                     <a class="nav-link active" aria-current="page" routerLink="/signup" style="color:white">Sign Up</a>
                 </li>
                 <li (click)="toggleProfileSection()" class="nav-item above992" *ngIf="isAuth">
-                    <img src={{profilePic}} class="headImg" style="cursor: pointer;">
+                    <img [src]="profilePic ? profilePic : 'https://i.postimg.cc/t4S4SHmg/1053244.png'" class="headImg"
+                        style="cursor: pointer;">
                 </li>
             </ul>
         </div>
@@ -40,7 +42,7 @@
 <div *ngIf="showProfileSection" class="container prof-cont">
     <div class="card mt-2">
         <div class="prof-pic">
-            <img src={{profilePic}} class="selImg">
+            <img [src]="profilePic ? profilePic : 'https://i.postimg.cc/t4S4SHmg/1053244.png'" class="selImg">
         </div>
         <div class=" card-body">
             <h5 class="card-title text-center">{{userName}}</h5>

@@ -3,8 +3,12 @@
         <div class="fhead">Followers</div>
         <ul (click)="userProf(f)" *ngFor="let f of followers"
             class="list-group list-group-flush d-flex flex-row align-items-center ps-3">
-            <img *ngIf="followerPics[f]" [src]="[followerPics[f]]" class="sideImgs">
-            <li class=" list-group-item">{{f}}</li>
+            <img [src]="followerPics[f] ? followerPics[f] : 'https://i.postimg.cc/t4S4SHmg/1053244.png'"
+                class="sideImgs">
+            <li class="list-group-item">{{f}}</li>
+        </ul>
+        <ul *ngIf="followers.length === 0" class="list-group list-group-flush ps-3">
+            <li class="list-group-item">No Followers</li>
         </ul>
     </div>
 
@@ -12,8 +16,12 @@
         <div class="fhead">Followings</div>
         <ul (click)="userProf(g)" *ngFor="let g of followings"
             class="list-group list-group-flush d-flex flex-row align-items-center ps-3">
-            <img *ngIf="followingsPics[g]" [src]="[followingsPics[g]]" class="sideImgs">
+            <img [src]="followingsPics[g] ? followingsPics[g] : 'https://i.postimg.cc/t4S4SHmg/1053244.png'"
+                class="sideImgs">
             <li class=" list-group-item">{{g}}</li>
+        </ul>
+        <ul *ngIf="followings.length === 0" class="list-group list-group-flush ps-3">
+            <li class="list-group-item">No Followings</li>
         </ul>
     </div>
 
@@ -21,9 +29,13 @@
         <div class="fhead">Freinds</div>
         <ul (click)="userProf(r)" *ngFor="let r of freindsName"
             class="list-group list-group-flush d-flex flex-row align-items-center ps-3">
-            <img *ngIf="freindsPics[r]" [src]="[freindsPics[r]]" class="sideImgs">
+            <img [src]="freindsPics[r] ? freindsPics[r] : 'https://i.postimg.cc/t4S4SHmg/1053244.png'" class="sideImgs">
             <li class=" list-group-item">{{r}}</li>
         </ul>
-        <div class="chat-container" routerLink="/chat"><span class="chat">Chat with Freinds!</span></div>
+        <ul *ngIf="freindsName.length === 0" class="list-group list-group-flush ps-3">
+            <li class="list-group-item">No Freinds</li>
+        </ul>
+        <div *ngIf="freindsName.length !== 0" class="chat-container" routerLink="/chat"><span class="chat">Chat with
+                Freinds!</span></div>
     </div>
 </div>

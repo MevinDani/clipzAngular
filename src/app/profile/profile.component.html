@@ -2,7 +2,7 @@
     <div class="user-cont">
         <div class="container mt-2">
             <div class="card">
-                <img *ngIf="profPic" [src]="profPic" class="card-img-top">
+                <img [src]="profPic ? profPic : 'https://i.postimg.cc/t4S4SHmg/1053244.png'" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">{{userName}}</h5>
                     <p class="card-text text-center">{{ about }}
@@ -26,8 +26,8 @@
                         <button *ngIf="followCheck" (click)="unfollowUser(userId)" class="btn btn-warning">
                             UnFollow -
                         </button>
-                        <button *ngIf="showChatButton && (userId!==locUserId)" routerLink="/chat"
-                            class="btn btn-success">
+                        <button *ngIf="showChatButton && (userId!==locUserId)" (click)="sendUname(userName)"
+                            routerLink="/chat" class="btn btn-success">
                             Chat!
                         </button>
                     </div>
@@ -60,7 +60,8 @@
         <div class="container post-cont" *ngFor="let p of userPost">
             <div>
                 <div class="usname" (click)="userProf(p.creator,p.name)">
-                    <img *ngIf="postProfPic[p.name]" [src]="postProfPic[p.name]" class="upic">
+                    <img [src]="postProfPic[p.name] ? postProfPic[p.name] : 'https://i.postimg.cc/t4S4SHmg/1053244.png'"
+                        class="upic">
                     <span class="uname">{{p.name}}</span>
                 </div>
                 <div class="header">
@@ -127,7 +128,8 @@
                             <div *ngIf="comments.length===0">No Comments, add your comment</div>
                             <div *ngIf="comments.length>0" [ngClass]="{'first-comment': first}">
                                 <div class="usname" [routerLink]="['/profile/user',c.userId,c.name]">
-                                    <img *ngIf="postProfPic[c.name]" [src]="postProfPic[c.name]" class="cpic">
+                                    <img [src]="postProfPic[c.name] ? postProfPic[c.name] : 'https://i.postimg.cc/t4S4SHmg/1053244.png'"
+                                        class="cpic">
                                     <span class="uname">{{c.name}}</span>
                                 </div>
                                 <p class="card-text">{{c.content}}</p>

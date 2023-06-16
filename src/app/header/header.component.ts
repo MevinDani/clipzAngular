@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     this.authService.getToken().subscribe((result: any) => {
       this.token = result;
+      this.locUserId = result
       // console.log(this.token);
       this.ds.getUser(this.token).subscribe((result: any) => {
         // console.log(result);
