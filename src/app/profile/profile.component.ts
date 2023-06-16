@@ -57,6 +57,7 @@ export class ProfileComponent implements OnInit {
 
   locFollowers: any = []
   locFollowings: any = []
+  locFreinds: any = []
 
   showChatButton!: boolean;
 
@@ -104,6 +105,8 @@ export class ProfileComponent implements OnInit {
       this.locFollowers = result.followers
       this.locFollowings = result.followings
       this.showChatButton = this.locFollowers.includes(this.userId) && this.locFollowings.includes(this.userId);
+      this.locFreinds = this.locFollowers.filter((element: any) => this.locFollowings.includes(element))
+      // console.log(this.locFreinds);
     })
 
 
@@ -237,6 +240,8 @@ export class ProfileComponent implements OnInit {
 
 
       this.userPost = result
+      // console.log(this.userPost);
+
       // console.log(this.logUserLikes);
       for (let l of result) {
         // console.log(l);
@@ -248,6 +253,45 @@ export class ProfileComponent implements OnInit {
         }
         // this.likes[l.id] = l.likes
       }
+    })
+  }
+
+  getFreindsPost() {
+    // console.log(this.locFreinds);
+    this.ps.getFreindsPost(this.locUserId).subscribe((result: any) => {
+      // console.log(result);
+      for (let n of result) {
+        // console.log(n.name);
+        this.postCreators.push(n.name)
+      }
+      // console.log(this.postCreators);
+      // unique(rm dupes)
+      this.postCreators = [...new Set(this.postCreators)];
+      // console.log(this.postCreators);
+
+      for (let u of this.postCreators) {
+        this.ds.getProfPic(u).subscribe((result: any) => {
+          // console.log(u, result);
+          this.postProfPic[u] = result
+          // console.log(this.postProfPic);
+        })
+      }
+      // console.log(this.postProfPic);
+
+
+      this.userPost = result
+      // console.log(this.logUserLikes);
+      for (let l of result) {
+        // console.log(l);
+        this.postLikesNum[l._id] = l.likes.length
+        for (let u of l.likes) {
+          if (u == this.locUserId) {
+            this.logUserLikes[l._id] = true
+          }
+        }
+        // this.likes[l.id] = l.likes
+      }
+
     })
   }
 

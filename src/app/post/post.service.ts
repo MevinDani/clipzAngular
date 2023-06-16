@@ -310,4 +310,12 @@ export class PostService implements OnInit {
             })
     }
 
+    getFreindsPost(id: any) {
+        return this.http.get('http://localhost:2000/api/posts/freindspost/' + id)
+    }
+
+    getPostsId(id: any) {
+        return this.http.get('http://localhost:2000/api/posts/profile/' + id)
+    }
+
 }

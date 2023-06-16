@@ -14,3 +14,17 @@ input[type='file'] {
 label p {
     color: coral;
 }
+
+@media (max-width:572px) {
+    .imgCont {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width:420px) {
+    .imagePreview img {
+        height: 150px;
+        width: 200px;
+    }
+}

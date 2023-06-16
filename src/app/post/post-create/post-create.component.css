@@ -26,3 +26,56 @@ input[type='file'] {
 .imagePreview img {
     height: 100%;
 }
+
+.imgCont button {
+    width: 30%;
+}
+
+
+@media (max-width: 992px) {
+
+    /* Styles for screens with a maximum width of 992px or below (medium screens) */
+    #postCreateCont {
+        margin-top: 12px;
+        /* Adjust other properties as needed */
+    }
+
+    .card {
+        box-shadow: none;
+        /* Adjust other properties as needed */
+    }
+
+    /* Adjust other styles as needed for medium screens */
+}
+
+@media (max-width: 768px) {
+
+    /* Styles for screens with a maximum width of 768px or below (small screens) */
+    #postCreateCont {
+        margin-top: 10px;
+        /* Adjust other properties as needed */
+    }
+
+    .card {
+        box-shadow: none;
+        /* Adjust other properties as needed */
+    }
+
+    .imgCont {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .imgCont button {
+        width: 100%;
+    }
+
+    /* Adjust other styles as needed for small screens */
+}
+
+@media (max-width: 342px) {
+    .imagePreview img {
+        height: 150px;
+        width: 200px;
+    }
+}

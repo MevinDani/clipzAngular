@@ -1,6 +1,17 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid" id="head">
         <a class="navbar-brand" routerLink="/" style="color:white">Picz</a>
+        <div class="ms-auto below992">
+            <div class="d-flex align-items-center">
+                <ul class="navbar-nav">
+                    <li class="nav-item" *ngIf="isAuth">
+                        <a class="navbar-brand" style="color:white" (click)="toggleProfileSection()">
+                            <img src={{profilePic}} class="headImg" style="cursor: pointer;">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -19,14 +30,9 @@
                 <li class="nav-item" *ngIf="!isAuth">
                     <a class="nav-link active" aria-current="page" routerLink="/signup" style="color:white">Sign Up</a>
                 </li>
-                <li (click)="toggleProfileSection()" class="nav-item" *ngIf="isAuth">
+                <li (click)="toggleProfileSection()" class="nav-item above992" *ngIf="isAuth">
                     <img src={{profilePic}} class="headImg" style="cursor: pointer;">
                 </li>
-                <!-- <li class="nav-item" *ngIf="isAuth">
-                    <a class="nav-link active" aria-current="page" (click)="logout()"
-                        style="color:white; cursor: pointer;">Log Out</a>
-                </li> -->
-
             </ul>
         </div>
     </div>
@@ -39,7 +45,7 @@
         <div class=" card-body">
             <h5 class="card-title text-center">{{userName}}</h5>
             <div class="prof-btns">
-                <button [routerLink]="['/profile/user',locUserId,userName]" (click)="profile()" class="btn btn-primary">
+                <button [routerLink]="['/profile/user',locUserId,userName]" (click)="profile()" class="btn btn-success">
                     View Profile
                 </button>
                 <button (click)="logout()" class="btn btn-danger">

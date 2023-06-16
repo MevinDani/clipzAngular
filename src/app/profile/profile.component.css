@@ -254,6 +254,7 @@ svg:hover {
 
 .singCmt {
     position: relative;
+    width: 50%;
 }
 
 .comment-time-container {
@@ -304,6 +305,20 @@ svg:hover {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.highlight {
+    background-color: rgb(162, 215, 255);
+}
+
+.comment-right {
+    align-self: flex-end;
+    /* Add any other styles specific to the right-aligned comments */
+}
+
+.comment-left {
+    align-self: flex-start;
+    /* Add any other styles specific to the left-aligned comments */
 }
 
 /* mq */
@@ -378,4 +393,26 @@ svg:hover {
     .container {
         width: 60%;
     } */
+}
+
+@media (max-width: 576px) {
+    .card-img-top {
+        width: 100%;
+    }
+
+    .singCmt {
+        width: 70%;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .card-img-top {
+        width: 100%;
+    }
+
+    .singCmt {
+        width: 80%;
+    }
+
 }

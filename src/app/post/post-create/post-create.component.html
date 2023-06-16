@@ -12,9 +12,10 @@
                 <div *ngIf="(this.postForm.get('title')?.errors)&&(this.postForm.get('title')?.touched)">
                     <p class="text-danger">Minimum 3 characters required</p>
                 </div>
-                <div class="d-flex align-items-center justify-content-evenly">
-                    <button class="btn btn-info" type="button" (click)="filePicker.click()"
-                        style="width: 15%; margin: 10px 0;">Pick Image</button>
+                <div class="d-flex align-items-center justify-content-evenly imgCont">
+                    <button class="btn btn-info" type="button" (click)="filePicker.click()" style="margin: 10px 0;">
+                        Pick Image
+                    </button>
                     <input type="file" #filePicker (change)="onImagePicked($event)">
                     <div class="imagePreview" *ngIf="imagePreview !== '' && imagePreview">
                         <img [src]="imagePreview" [alt]="postForm.value.title">

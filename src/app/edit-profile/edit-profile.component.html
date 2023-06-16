@@ -24,7 +24,7 @@
                 <div *ngIf="(this.editProForm.get('about')?.errors)&&(this.editProForm.get('about')?.touched)">
                     <p class="text-danger">Minimum 4 characters required</p>
                 </div>
-                <div class="d-flex align-items-center justify-content-evenly">
+                <div class="d-flex align-items-center justify-content-evenly imgCont">
                     <h5 style="color: coral;">Select a Profile Picture</h5>
                     <button class="btn btn-info" type="button" (click)="filePicker.click()">Pick Image</button>
                     <input type="file" #filePicker (change)="onImagePicked($event)">
