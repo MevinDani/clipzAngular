@@ -34,7 +34,7 @@
 
 .prof-cont {
     background-color: rgb(255, 174, 144);
-    width: 35%;
+    width: 70%;
 }
 
 .prof-btns {
@@ -278,4 +278,38 @@ svg:hover {
 .comment-left {
     align-self: flex-start;
     /* Add any other styles specific to the left-aligned comments */
+}
+
+/* chatgp mq */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+
+    .prof-cont {
+        width: 100%;
+        position: static;
+    }
+
+    .img img,
+    .card-img-top {
+        height: auto;
+    }
+
+    .cmtCont {
+        height: auto;
+        overflow-x: initial;
+        white-space: normal;
+        scroll-behavior: auto;
+    }
+
+    .singCmt {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-img-top {
+        width: 100%;
+    }
 }

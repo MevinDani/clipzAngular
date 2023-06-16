@@ -9,7 +9,7 @@
 
 .sidebar {
     width: 25%;
-    margin-left: 30px;
+    /* margin-left: 30px; */
 }
 
 .accordion-item {
@@ -33,7 +33,7 @@
 .container {
     /* display: flex;
     flex-direction: column; */
-    /* width: 60%; */
+    width: 75%;
     /* border: 1px solid salmon; */
     margin-top: 15px;
     border-radius: 10px;
@@ -304,4 +304,78 @@ svg:hover {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+/* mq */
+/* Media query for screens smaller than 576px */
+@media (max-width: 576px) {
+    .sidebar {
+        display: none;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .postBtns {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .postBtns span {
+        font-size: small;
+    }
+
+    .prof-btns span {
+        font-size: small;
+    }
+}
+
+/* Media query for screens between 576px and 992px */
+@media (min-width: 576px) and (max-width: 992px) {
+    .accords {
+        display: none !important;
+    }
+
+    .main {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .sidebar {
+        width: 25%;
+        margin-right: 10px;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        width: 80%;
+    }
+
+}
+
+/* Media query for screens larger than 992px */
+@media (min-width: 992px) {
+    .user-cont {
+        width: 75%;
+    }
+
+    .main {
+        justify-content: space-evenly;
+    }
+
+    .sidebar {
+        width: 25%;
+        margin-left: 0;
+        margin-right: 50px;
+    }
+
+    .accords {
+        display: none !important;
+    }
+
+    /* 
+    .container {
+        width: 60%;
+    } */
 }

@@ -58,12 +58,12 @@
                 <form [formGroup]="messageForm" (ngSubmit)="messageSubmit()"
                     class="d-flex flex-column align-items-center">
                     <textarea formControlName="message" id="comment" name="comment" class="form-control mt-5"
-                        placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1" rows="1"
+                        placeholder="Message" class="form-control" id="exampleFormControlTextarea1" rows="1"
                         style="margin-top: 20px;"></textarea>
                     <div *ngIf="(this.messageForm.get('message')?.errors)&&(this.messageForm.get('message')?.touched)">
-                        <p class="text-danger">Minimum 3 characters required</p>
+                        <p class="text-danger">Minimum 1 character required</p>
                     </div>
-                    <button class="btn btn-success mt-2" style="height: 30px;">
+                    <button class="btn btn-success mt-2" style="height: 30px; width: 20%;">
                         <p style="font-size: small;">Send</p>
                     </button>
                 </form>

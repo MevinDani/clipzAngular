@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DataService } from '../data.service';
 import { AuthService } from '../auth/auth.service';
+import { PostService } from '../post/post.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   isAuth: any
   token: string | undefined;
 
-  constructor(private route: Router, private toastr: ToastrService, private ds: DataService, private authService: AuthService) { }
+  constructor(private route: Router, private toastr: ToastrService, private ds: DataService, private authService: AuthService, private ps: PostService) { }
   ngOnInit(): void {
     this.authService.getToken().subscribe((result: any) => {
       this.token = result;
@@ -29,6 +30,12 @@ export class HeaderComponent implements OnInit, DoCheck {
         this.userName = result.username
       })
     });
+    this.ps.getToken().subscribe((result: any) => {
+      // console.log(result);
+      this.profilePic = result
+      // console.log(this.profilePic);
+
+    })
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
     // console.log(this.locUserId);
     if (this.locUserId) {

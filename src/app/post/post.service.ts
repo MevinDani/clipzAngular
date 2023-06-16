@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from "@angular/core";
 import { Post } from "./post.model";
-import { Subject, map } from "rxjs";
+import { BehaviorSubject, Observable, Subject, map } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,16 @@ const options = {
 
 @Injectable({ providedIn: 'root' })
 export class PostService implements OnInit {
+    private profPicSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
+    setToken(profPic: string | null): void {
+        this.profPicSubject.next(profPic);
+    }
+
+    getToken(): Observable<string | null> {
+        return this.profPicSubject.asObservable();
+    }
+
     private posts: Post[] = []
     private postUpdated = new Subject<Post[]>()
     logUserId: any
@@ -150,6 +160,7 @@ export class PostService implements OnInit {
                 // console.log(result);
                 if (result.message == 'Profile Edited Successfully') {
                     this.toastr.success('Profile Edited Successfully!')
+                    this.setToken(result.data.profilePic)
                     this.router.navigateByUrl('/profile/user/' + id + '/' + username)
                 } else {
                     this.toastr.error(result.message)
@@ -254,7 +265,7 @@ export class PostService implements OnInit {
         this.http.delete('http://localhost:2000/api/posts/' + postId + '/comments/' + cmntId)
             .subscribe((result: any) => {
                 if (result.message == 'Comment deleted successfully.') {
-                    this.toastr.info('Comment deleted successfully.')
+                    this.toastr.warning('Comment deleted successfully.')
                 } else {
                     this.toastr.error(result.message)
                     console.log(result);
@@ -291,7 +302,7 @@ export class PostService implements OnInit {
         return this.http.delete('http://localhost:2000/api/messages/' + messageId + '/' + senderId)
             .subscribe((result: any) => {
                 if (result.message == 'Message deleted successfully') {
-                    this.toastr.success('Message deleted successfully')
+                    this.toastr.warning('Message deleted successfully')
                 } else {
                     this.toastr.error(result.message)
                     console.log(result);

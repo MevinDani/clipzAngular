@@ -13,6 +13,7 @@ export class ChatComponent implements OnInit {
   @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef | undefined;
 
   locUserId: any
+  locUsername: any
   freinds: any = []
   freindsId: any = []
   freindProfPic: any = {}
@@ -32,6 +33,7 @@ export class ChatComponent implements OnInit {
 
     this.ds.getUser(this.locUserId).subscribe((result: any) => {
       // console.log(result);
+      this.locUsername = result.username
 
       this.freindProfPicId[this.locUserId] = result.profilePic
 
@@ -108,6 +110,7 @@ export class ChatComponent implements OnInit {
   }
 
   selectChatUser(name: any) {
+    this.chatUsersDetails[this.locUserId] = this.locUsername
     this.isLoading = true
     this.selectedUserDetails['name'] = name;
     // console.log(this.selectedUserDetails);
@@ -126,7 +129,7 @@ export class ChatComponent implements OnInit {
           this.conversations.map((i: any) => {
             this.ds.getUser(i.sender).subscribe((result: any) => {
               this.chatUsersDetails[result._id] = result.username
-              // console.log(this.chatUsersDetails);
+              console.log(this.chatUsersDetails);
             })
           })
           setTimeout(() => {
@@ -145,7 +148,7 @@ export class ChatComponent implements OnInit {
   }
 
   messageForm = this.fb.group({
-    message: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+    message: ['', [Validators.required, Validators.minLength(1), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
   })
 
   messageSubmit() {
@@ -164,7 +167,7 @@ export class ChatComponent implements OnInit {
 
       this.ps.sendMessage(this.conversationId, this.locUserId, this.chatUserId, msgPath.message)
         .subscribe((result: any) => {
-          console.log(result);
+          // console.log(result);
           const newConv = {
             _id: result._id,
             sender: this.locUserId,

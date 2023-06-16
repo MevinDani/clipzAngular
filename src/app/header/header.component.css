@@ -3,6 +3,9 @@ nav {
     padding: 8px;
     text-align: left;
     display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .headImg {
@@ -32,7 +35,7 @@ background-color: rgb(255, 255, 255); */
     /* background-color: rgb(255, 255, 255); */
     width: 20%;
     border-radius: 12px;
-    position: absolute;
+    position: fixed;
     right: 0;
     z-index: 1;
 }
@@ -68,3 +71,14 @@ background-color: rgb(255, 255, 255); */
     border-radius: 12px;
     padding: 5px;
 } */
+
+/* Media query for small devices */
+@media (max-width: 576px) {
+    .prof-cont {
+        width: 70%;
+        position: static;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        z-index: 1;
+    }
+}

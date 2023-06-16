@@ -43,6 +43,10 @@ export class SidebarComponent implements OnInit, DoCheck, OnDestroy {
   // @Input() followNum:any
   // @Input() unfollowNum:any
   @Input() statChng: any
+  @Input()
+  containerClass!: string;
+  @Input()
+  containerStyle!: { [key: string]: string; };
 
   followStatus!: boolean;
   subscription: Subscription;

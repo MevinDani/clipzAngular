@@ -55,6 +55,11 @@ export class ProfileComponent implements OnInit {
 
   currentTime: Date = new Date();
 
+  locFollowers: any = []
+  locFollowings: any = []
+
+  showChatButton!: boolean;
+
 
   constructor(private toastr: ToastrService, private route: ActivatedRoute, private ds: DataService, private ps: PostService, private router: Router, private fb: FormBuilder) { }
   @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef | undefined;
@@ -94,6 +99,15 @@ export class ProfileComponent implements OnInit {
           }
         }
       })
+
+    this.ds.getUser(this.locUserId).subscribe((result: any) => {
+      this.locFollowers = result.followers
+      this.locFollowings = result.followings
+      this.showChatButton = this.locFollowers.includes(this.userId) && this.locFollowings.includes(this.userId);
+    })
+
+
+
 
     this.ds.getProfPost(this.userId).subscribe((result: any) => {
       // console.log(result);
