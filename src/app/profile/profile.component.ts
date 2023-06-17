@@ -61,6 +61,10 @@ export class ProfileComponent implements OnInit {
 
   showChatButton!: boolean;
 
+  selectChatUserReloodToggle = true
+
+  subscription!: Subscription;
+
 
   constructor(private toastr: ToastrService, private route: ActivatedRoute, private ds: DataService, private ps: PostService, private router: Router, private fb: FormBuilder) { }
   @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef | undefined;
@@ -69,11 +73,25 @@ export class ProfileComponent implements OnInit {
     this.userId = this.route.snapshot.params['id']
     this.userName = this.route.snapshot.params['name']
 
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
+    this.subscription = this.route.params.subscribe(params => {
+      const newUserId = params['id'];
+      const newUserName = params['name'];
+
+      if (newUserId !== this.userId || newUserName !== this.userName) {
+        // Parameters have changed, perform reload or other logic here
+        this.userId = newUserId;
+        this.userName = newUserName;
         window.location.reload();
       }
     });
+
+    // if (this.selectChatUserReloodToggle) {
+    //   this.router.events.subscribe(event => {
+    //     if (event instanceof NavigationEnd) {
+    //       window.location.reload();
+    //     }
+    //   });
+    // }
 
     this.ds.getUser(this.userId).subscribe((result: any) => {
       // console.log(result);
@@ -485,9 +503,12 @@ export class ProfileComponent implements OnInit {
   }
 
   sendUname(name: any) {
+    this.selectChatUserReloodToggle = false
     console.log(name);
-    this.ps.setSelectedUser(name)
+    this.ps.setSelectedUser(name);
+    this.router.navigateByUrl('/chat');
   }
+
 
 
   ngOnDestroy(): void {

@@ -1,15 +1,18 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import { PostService } from '../post/post.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { io, Socket } from 'socket.io-client';
+import { NavigationEnd, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('commentContainer', { static: false }) commentContainer: ElementRef | undefined;
 
   locUserId: any
@@ -25,14 +28,23 @@ export class ChatComponent implements OnInit {
   conversations: any = []
   isLoading!: boolean;
   chatUsersDetails: any = {}
-  chatImgContView!: boolean;
+  chatImgContView = true;
 
   selectedUser: any
+  selectChatUserReloodToggle = false
 
-  constructor(private ds: DataService, private ps: PostService, private fb: FormBuilder) { }
+  constructor(private ds: DataService, private ps: PostService, private fb: FormBuilder, private router: Router) { }
+  ngOnDestroy(): void {
+    this.selectedUser = null;
+    // console.log(this.selectedUser);
+    this.ps.setSelectedUser('')
+  }
 
   ngOnInit(): void {
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
+    this.chatImgContView = true
+    // console.log(this.chatImgContView);
+
 
     this.ds.getUser(this.locUserId).subscribe((result: any) => {
       // console.log(result);
@@ -72,7 +84,7 @@ export class ChatComponent implements OnInit {
     // socket io
     this.socket = io('ws://localhost:8900');
     this.socket.on('getMessage', (data: any) => {
-      console.log(data);
+      // console.log(data);
       const newConv = {
         sender: data.senderId,
         message: data.message,
@@ -85,8 +97,8 @@ export class ChatComponent implements OnInit {
       });
     })
     this.socket.on('deletedMessage', (data: any) => {
-      console.log(this.conversations);
-      console.log(data);
+      // console.log(this.conversations);
+      // console.log(data);
       const msgId = data.messageId
       this.conversations = this.conversations.filter((i: any) => i._id !== msgId)
     })
@@ -102,13 +114,25 @@ export class ChatComponent implements OnInit {
       // console.log(users, 'usersockid');
     })
 
-    this.chatImgContView = true
-
     this.ps.getSelectedUser().subscribe(user => {
-      this.selectedUser = user;
-      this.selectChatUser(user)
+      if (user) {
+        // console.log(user);
+        this.selectedUser = user;
+        // console.log(this.selectedUser, 's');
+        this.selectChatUser(user)
+      }
+
       // Handle the selected user in the chat component
     });
+
+    // this.ps.getSelectedUser().pipe(takeUntil(this.destroy$)).subscribe(user => {
+    //   if (user) {
+    //     console.log(user);
+    //     this.selectedUser = user;
+    //     this.selectChatUser(user);
+    //   }
+    //   // Handle the selected user in the chat component
+    // });
 
   }
 
@@ -121,6 +145,8 @@ export class ChatComponent implements OnInit {
 
   selectChatUser(name: any) {
     this.chatImgContView = false
+    // console.log(this.chatImgContView);
+
     this.chatUsersDetails[this.locUserId] = this.locUsername
     this.isLoading = true
     this.selectedUserDetails['name'] = name;
@@ -136,7 +162,7 @@ export class ChatComponent implements OnInit {
         this.ps.getMessages(this.conversationId).subscribe((result: any) => {
           // console.log(result);
           this.conversations = result
-          console.log(this.conversations);
+          // console.log(this.conversations);
           this.conversations.map((i: any) => {
             this.ds.getUser(i.sender).subscribe((result: any) => {
               this.chatUsersDetails[result._id] = result.username
@@ -230,6 +256,5 @@ export class ChatComponent implements OnInit {
       return `${days} ${days === 1 ? 'day' : 'days'} ago`;
     }
   }
-
 
 }

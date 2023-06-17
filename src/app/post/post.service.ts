@@ -322,8 +322,16 @@ export class PostService implements OnInit {
     // chat live user select
     private selectedUserSubject = new BehaviorSubject<string>('');
 
+    // setSelectedUser(user: string): void {
+    //     this.selectedUserSubject.next(user);
+    // }
+
     setSelectedUser(user: string): void {
-        this.selectedUserSubject.next(user);
+        if (user) {
+            this.selectedUserSubject.next(user);
+        } else {
+            this.selectedUserSubject.next('');
+        }
     }
 
     getSelectedUser(): Observable<string> {
