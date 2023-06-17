@@ -168,6 +168,7 @@ export class ProfileComponent implements OnInit {
     this.ps.apifollowUser(id)
     this.followCheck = true
     this.followStatusChange.emit(true)
+    this.showChatButton = true
   }
 
   unfollowUser(id: any) {
@@ -175,6 +176,7 @@ export class ProfileComponent implements OnInit {
     this.ps.apiunfollowUser(id)
     this.followCheck = false
     this.followStatusChange.emit(false)
+    this.showChatButton = false
   }
 
 
@@ -400,12 +402,13 @@ export class ProfileComponent implements OnInit {
       if (result.message == 'Comment added successfully') {
         this.toastr.success('Comment added successfully')
       }
+      // const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date() }
+      const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date(), _id: result.comment._id }
+      this.comments.push(newComm)
+      setTimeout(() => {
+        this.scrollToBottom();
+      });
     })
-    const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date() }
-    this.comments.push(newComm)
-    setTimeout(() => {
-      this.scrollToBottom();
-    });
     // this.scrollToBottom();
     this.commentForm.reset()
   }
