@@ -176,7 +176,7 @@ export class PostService implements OnInit {
                 const updatedPosts = this.posts.filter(post => post.id !== postId)
                 this.posts = updatedPosts
                 this.postUpdated.next([...this.posts])
-                this.toastr.info('Post deleted successfully!')
+                this.toastr.warning('Post deleted successfully!')
             })
     }
 
