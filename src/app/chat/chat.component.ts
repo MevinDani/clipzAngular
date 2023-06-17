@@ -72,10 +72,12 @@ export class ChatComponent implements OnInit {
     // socket io
     this.socket = io('ws://localhost:8900');
     this.socket.on('getMessage', (data: any) => {
-      // console.log(data);
+      console.log(data);
       const newConv = {
         sender: data.senderId,
-        message: data.message
+        message: data.message,
+        _id: data.msgId,
+        timestamp: data.timestamp
       }
       this.conversations.push(newConv)
       setTimeout(() => {
@@ -83,6 +85,8 @@ export class ChatComponent implements OnInit {
       });
     })
     this.socket.on('deletedMessage', (data: any) => {
+      console.log(this.conversations);
+      console.log(data);
       const msgId = data.messageId
       this.conversations = this.conversations.filter((i: any) => i._id !== msgId)
     })
@@ -101,7 +105,6 @@ export class ChatComponent implements OnInit {
     this.chatImgContView = true
 
     this.ps.getSelectedUser().subscribe(user => {
-      console.log(user);
       this.selectedUser = user;
       this.selectChatUser(user)
       // Handle the selected user in the chat component
@@ -133,7 +136,7 @@ export class ChatComponent implements OnInit {
         this.ps.getMessages(this.conversationId).subscribe((result: any) => {
           // console.log(result);
           this.conversations = result
-          // console.log(this.conversations);
+          console.log(this.conversations);
           this.conversations.map((i: any) => {
             this.ds.getUser(i.sender).subscribe((result: any) => {
               this.chatUsersDetails[result._id] = result.username
@@ -163,25 +166,25 @@ export class ChatComponent implements OnInit {
     if (this.messageForm.valid) {
 
       const msgPath = this.messageForm.value
-      // console.log(this.messageForm.value);
-      // console.log(this.locUserId, this.chatUserId);
-
-      // socket send
-      this.socket.emit('sendMessage', {
-        senderId: this.locUserId,
-        receiverId: this.chatUserId,
-        message: msgPath.message
-      })
 
       this.ps.sendMessage(this.conversationId, this.locUserId, this.chatUserId, msgPath.message)
         .subscribe((result: any) => {
-          // console.log(result);
+          // socket send
+          this.socket.emit('sendMessage', {
+            senderId: this.locUserId,
+            receiverId: this.chatUserId,
+            message: msgPath.message,
+            msgId: result._id,
+            timestamp: new Date(),
+          })
           const newConv = {
             _id: result._id,
             sender: this.locUserId,
-            message: msgPath.message
+            message: msgPath.message,
+            timestamp: new Date(),
           }
           this.conversations.push(newConv)
+
           setTimeout(() => {
             this.scrollToBottom();
           });
@@ -193,16 +196,39 @@ export class ChatComponent implements OnInit {
   }
 
   deleteConv(messageId: any, senderId: any) {
+    // console.log(this.conversations);
+
     this.ps.deleteMessage(messageId, senderId)
     // console.log(this.chatUserId, messageId, senderId);
 
     this.conversations = this.conversations.filter((i: any) => i._id !== messageId)
+    // console.log('socket dels');
+
     // socket msg delete
     this.socket.emit('deleteMessage', {
       messageId,
       senderId,
       receiverId: this.chatUserId
     })
+  }
+
+  getTimeElapsed(createdAt: string): string {
+    const commentDate = new Date(createdAt);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
+
+    if (diff < 60) {
+      return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      const minutes = Math.floor(diff / 60);
+      return `${minutes} minutes ago`;
+    } else if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(diff / 86400);
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    }
   }
 
 

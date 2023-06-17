@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   isAuth: any
   token: string | undefined;
 
+
   constructor(private route: Router, private toastr: ToastrService, private ds: DataService, private authService: AuthService, private ps: PostService) { }
   ngOnInit(): void {
     this.authService.getToken().subscribe((result: any) => {
@@ -37,6 +38,7 @@ export class HeaderComponent implements OnInit, DoCheck {
       // console.log(this.profilePic);
 
     })
+
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
     // console.log(this.locUserId);
     if (this.locUserId) {
@@ -51,6 +53,7 @@ export class HeaderComponent implements OnInit, DoCheck {
     } else {
       this.isAuth = false
     }
+
   }
 
   ngDoCheck(): void {
