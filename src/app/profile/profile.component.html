@@ -26,8 +26,8 @@
                         <button *ngIf="followCheck" (click)="unfollowUser(userId)" class="btn btn-warning">
                             UnFollow -
                         </button>
-                        <button *ngIf="showChatButton && (userId!==locUserId)" (click)="sendUname(userName)"
-                            class="btn btn-success">
+                        <button *ngIf="showChatButton && (userId!==locUserId) && followCheck"
+                            (click)="sendUname(userName)" class="btn btn-success">
                             Chat!
                         </button>
                     </div>

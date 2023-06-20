@@ -168,7 +168,9 @@ export class ProfileComponent implements OnInit {
     this.ps.apifollowUser(id)
     this.followCheck = true
     this.followStatusChange.emit(true)
-    this.showChatButton = true
+    this.locFollowings.push(id)
+    this.showChatButton = this.locFollowers.includes(this.userId) && this.locFollowings.includes(this.userId);
+    // this.showChatButton = true
   }
 
   unfollowUser(id: any) {
