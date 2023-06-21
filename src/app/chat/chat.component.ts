@@ -82,7 +82,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 
     // socket io
-    this.socket = io('ws://localhost:8900');
+    this.socket = io('https://piczsock.onrender.com');
     this.socket.on('getMessage', (data: any) => {
       // console.log(data);
       const newConv = {

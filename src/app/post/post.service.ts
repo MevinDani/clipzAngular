@@ -26,6 +26,8 @@ export class PostService implements OnInit {
     private posts: Post[] = []
     private postUpdated = new Subject<Post[]>()
     logUserId: any
+    backUrl = 'https://piczback.onrender.com/api'
+
 
     constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
 
@@ -51,9 +53,9 @@ export class PostService implements OnInit {
     }
 
     getPosts() {
-        this.http.get<{ message: string, posts: any }>('http://localhost:2000/api/posts')
+        this.http.get<{ message: string, posts: any }>(this.backUrl + '/posts')
             .pipe(map((postData) => {
-                // console.log(postData);
+                // console.log(postData, 'backurl');
                 return postData.posts.map((post: any) => {
                     return {
                         title: post.title,
@@ -80,7 +82,7 @@ export class PostService implements OnInit {
     getPostEdit(id: string) {
         return this.http.get<{
             [x: string]: any; imagePath: any; _id: string, title: string, content: string, creator: string
-        }>('http://localhost:2000/api/posts/' + id)
+        }>(this.backUrl + '/posts/' + id)
     }
 
     addPost(title: any, content: any, image: any) {
@@ -89,9 +91,9 @@ export class PostService implements OnInit {
         postData.append('title', title)
         postData.append('content', content)
         postData.append('image', image, title)
-        this.http.post<{ message: string, post: Post }>('http://localhost:2000/api/posts', postData, this.tokenHead())
+        this.http.post<{ message: string, post: Post }>(this.backUrl + '/posts', postData, this.tokenHead())
             .subscribe((responseData) => {
-                console.log(responseData);
+                // console.log(responseData);
                 const post: Post = {
                     id: responseData.post.id,
                     title: responseData.post.title,
@@ -102,9 +104,9 @@ export class PostService implements OnInit {
                     likes: undefined,
                     lastUpdated: undefined
                 }
-                console.log(post);
+                // console.log(post);
                 this.posts.push(post)
-                console.log(this.posts);
+                // console.log(this.posts);
                 this.postUpdated.next([...this.posts])
                 this.toastr.success('Post added successfully!')
                 this.router.navigateByUrl('')
@@ -119,7 +121,7 @@ export class PostService implements OnInit {
             postData.append('title', title)
             postData.append('content', content)
             postData.append('image', image, title)
-            console.log(postData);
+            // console.log(postData);
         } else {
             postData = {
                 id: id,
@@ -128,7 +130,7 @@ export class PostService implements OnInit {
                 imagePath: image
             }
         }
-        this.http.put('http://localhost:2000/api/posts/' + id, postData, this.tokenHead())
+        this.http.put(this.backUrl + '/posts/' + id, postData, this.tokenHead())
             .subscribe(response => {
                 // console.log(response);
 
@@ -145,7 +147,7 @@ export class PostService implements OnInit {
             postData.append('username', username)
             postData.append('about', about)
             postData.append('image', image)
-            console.log(postData);
+            // console.log(postData);
         } else {
             postData = {
                 id: id,
@@ -155,7 +157,7 @@ export class PostService implements OnInit {
             }
             // console.log(postData);
         }
-        this.http.put('http://localhost:2000/api/users/profile/edit/', postData)
+        this.http.put(this.backUrl + '/users/profile/edit/', postData)
             .subscribe((result: any) => {
                 // console.log(result);
                 if (result.message == 'Profile Edited Successfully') {
@@ -171,7 +173,7 @@ export class PostService implements OnInit {
 
 
     deletePost(postId: string) {
-        this.http.delete('http://localhost:2000/api/posts/' + postId, this.tokenHead())
+        this.http.delete(this.backUrl + '/posts/' + postId, this.tokenHead())
             .subscribe(() => {
                 const updatedPosts = this.posts.filter(post => post.id !== postId)
                 this.posts = updatedPosts
@@ -185,7 +187,7 @@ export class PostService implements OnInit {
         const body = {
             id: logUserId
         }
-        this.http.put('http://localhost:2000/api/users/follow/' + id, body).subscribe((result: any) => {
+        this.http.put(this.backUrl + '/users/follow/' + id, body).subscribe((result: any) => {
             if (result.message == 'User has been followed') {
                 this.toastr.success('User has been followed')
             } else {
@@ -199,19 +201,19 @@ export class PostService implements OnInit {
         const body = {
             id: logUserId
         }
-        this.http.put('http://localhost:2000/api/users/unfollow/' + id, body).subscribe((result: any) => {
+        this.http.put(this.backUrl + '/users/unfollow/' + id, body).subscribe((result: any) => {
             if (result.message == 'User has been unfollowed') {
                 this.toastr.warning('Unfollowed the User')
             } else {
                 this.toastr.error(result.message)
-                console.log(result);
+                // console.log(result);
 
             }
         })
     }
 
     getFollowersList(id: any) {
-        return this.http.get('http://localhost:2000/api/users/followersList/' + id)
+        return this.http.get(this.backUrl + '/users/followersList/' + id)
     }
 
     likePost(postId: any) {
@@ -219,7 +221,7 @@ export class PostService implements OnInit {
         const body = {
             id: logUserId
         }
-        return this.http.put('http://localhost:2000/api/posts/post/like/' + postId, body).subscribe((result: any) => {
+        return this.http.put(this.backUrl + '/posts/post/like/' + postId, body).subscribe((result: any) => {
             // console.log(result);
         })
     }
@@ -229,17 +231,17 @@ export class PostService implements OnInit {
         const body = {
             id: logUserId
         }
-        return this.http.put('http://localhost:2000/api/posts/post/dislike/' + postId, body).subscribe((result: any) => {
+        return this.http.put(this.backUrl + '/posts/post/dislike/' + postId, body).subscribe((result: any) => {
             // console.log(result);
         })
     }
 
     getLikedPosts(id: any) {
-        return this.http.get('http://localhost:2000/api/posts/likedPosts/' + id)
+        return this.http.get(this.backUrl + '/posts/likedPosts/' + id)
     }
 
     getFollowingsPost(id: any) {
-        return this.http.get('http://localhost:2000/api/posts/followersPost/' + id)
+        return this.http.get(this.backUrl + '/posts/followersPost/' + id)
     }
 
     addComment(id: any, content: any, userId: any, name: any) {
@@ -250,42 +252,42 @@ export class PostService implements OnInit {
             name
         }
 
-        return this.http.post('http://localhost:2000/api/posts/' + id + '/comments', body)
+        return this.http.post(this.backUrl + '/posts/' + id + '/comments', body)
     }
 
     getComments(id: any) {
-        return this.http.get('http://localhost:2000/api/posts/' + id + '/comments')
+        return this.http.get(this.backUrl + '/posts/' + id + '/comments')
     }
 
     getLatestComments(id: any) {
-        return this.http.get('http://localhost:2000/api/posts/' + id + '/comments/latest')
+        return this.http.get(this.backUrl + '/posts/' + id + '/comments/latest')
     }
 
     commentDelete(postId: any, cmntId: any) {
-        this.http.delete('http://localhost:2000/api/posts/' + postId + '/comments/' + cmntId)
+        this.http.delete(this.backUrl + '/posts/' + postId + '/comments/' + cmntId)
             .subscribe((result: any) => {
                 if (result.message == 'Comment deleted successfully.') {
                     this.toastr.warning('Comment deleted successfully.')
                 } else {
                     this.toastr.error(result.message)
-                    console.log(result);
+                    // console.log(result);
                 }
             })
     }
 
     getConversations(userId: any) {
-        return this.http.get('http://localhost:2000/api/conversations/' + userId)
+        return this.http.get(this.backUrl + '/conversations/' + userId)
     }
 
     getMessages(conversationId: any) {
-        return this.http.get('http://localhost:2000/api/messages/' + conversationId)
+        return this.http.get(this.backUrl + '/messages/' + conversationId)
     }
 
     setConversationId(senderId: any, receiverId: any) {
         const body = {
             senderId, receiverId
         }
-        return this.http.post('http://localhost:2000/api/conversations/', body)
+        return this.http.post(this.backUrl + '/conversations/', body)
     }
 
     sendMessage(conversationId: any, sender: any, receiver: any, message: any) {
@@ -295,27 +297,27 @@ export class PostService implements OnInit {
             receiver,
             message
         }
-        return this.http.post('http://localhost:2000/api/messages/', body)
+        return this.http.post(this.backUrl + '/messages/', body)
     }
 
     deleteMessage(messageId: any, senderId: any) {
-        return this.http.delete('http://localhost:2000/api/messages/' + messageId + '/' + senderId)
+        return this.http.delete(this.backUrl + '/messages/' + messageId + '/' + senderId)
             .subscribe((result: any) => {
                 if (result.message == 'Message deleted successfully') {
                     this.toastr.warning('Message deleted successfully')
                 } else {
                     this.toastr.error(result.message)
-                    console.log(result);
+                    // console.log(result);
                 }
             })
     }
 
     getFreindsPost(id: any) {
-        return this.http.get('http://localhost:2000/api/posts/freindspost/' + id)
+        return this.http.get(this.backUrl + '/posts/freindspost/' + id)
     }
 
     getPostsId(id: any) {
-        return this.http.get('http://localhost:2000/api/posts/profile/' + id)
+        return this.http.get(this.backUrl + '/posts/profile/' + id)
     }
 
 
