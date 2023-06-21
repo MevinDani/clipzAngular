@@ -9,6 +9,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class AuthService {
   private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
+  backUrl = 'https://piczback.onrender.com/api'
+
   constructor(private http: HttpClient) { }
 
   setToken(token: string | null): void {
@@ -25,7 +27,7 @@ export class AuthService {
       username: uname,
       password: passwd,
     }
-    return this.http.post('http://localhost:2000/api/users/signup', body)
+    return this.http.post(this.backUrl + '/users/signup', body)
   }
 
   // login
@@ -34,6 +36,6 @@ export class AuthService {
       username: uname,
       password: passwd,
     }
-    return this.http.post('http://localhost:2000/api/users/login', body)
+    return this.http.post(this.backUrl + '/users/login', body)
   }
 }
