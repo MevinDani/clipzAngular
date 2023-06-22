@@ -9,6 +9,7 @@ import { LogGuard } from './auth/log.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ChatComponent } from './chat/chat.component';
+import { PostComponent } from './post/post.component';
 
 const routes: Routes = [
   { path: '', component: PostListComponent, canActivate: [AuthGuard] },
@@ -19,7 +20,7 @@ const routes: Routes = [
   { path: 'editUser', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'edit/:postId', component: PostCreateComponent, canActivate: [AuthGuard] },
   { path: 'profile/user/:id/:name', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: '/', pathMatch: 'full' }
+  { path: '**', component: PostComponent }
 ];
 
 @NgModule({
