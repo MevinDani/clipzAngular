@@ -38,7 +38,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.selectedUser = null;
     // console.log(this.selectedUser);
     this.ps.setSelectedUser('')
-    this.socket.emit('disconnect')
+    this.socket.emit('removeSocket')
   }
 
   ngOnInit(): void {
