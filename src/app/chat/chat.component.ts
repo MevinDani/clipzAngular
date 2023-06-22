@@ -82,7 +82,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 
     // socket io
-    this.socket = io('https://piczsock.onrender.com');
+    this.socket = io('https://piczsock.onrender.com/');
     this.socket.on('getMessage', (data: any) => {
       // console.log(data);
       const newConv = {
@@ -124,15 +124,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       // Handle the selected user in the chat component
     });
-
-    // this.ps.getSelectedUser().pipe(takeUntil(this.destroy$)).subscribe(user => {
-    //   if (user) {
-    //     console.log(user);
-    //     this.selectedUser = user;
-    //     this.selectChatUser(user);
-    //   }
-    //   // Handle the selected user in the chat component
-    // });
 
   }
 

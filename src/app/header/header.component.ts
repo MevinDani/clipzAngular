@@ -38,6 +38,9 @@ export class HeaderComponent implements OnInit, DoCheck {
       // console.log(this.profilePic);
 
     })
+    this.ps.getHName().subscribe((result: any) => {
+      this.userName = result
+    })
 
     this.locUserId = JSON.parse(localStorage.getItem('uid') || '')
     // console.log(this.locUserId);

@@ -23,6 +23,15 @@ export class PostService implements OnInit {
         return this.profPicSubject.asObservable();
     }
 
+    private headerNameSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+    setHName(profPic: string | null): void {
+        this.headerNameSubject.next(profPic);
+    }
+
+    getHName(): Observable<string | null> {
+        return this.headerNameSubject.asObservable();
+    }
+
     private posts: Post[] = []
     private postUpdated = new Subject<Post[]>()
     logUserId: any
@@ -163,6 +172,7 @@ export class PostService implements OnInit {
                 if (result.message == 'Profile Edited Successfully') {
                     this.toastr.success('Profile Edited Successfully!')
                     this.setToken(result.data.profilePic)
+                    this.setHName(result.data.username)
                     this.router.navigateByUrl('/profile/user/' + id + '/' + username)
                 } else {
                     this.toastr.error(result.message)
