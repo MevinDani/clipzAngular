@@ -112,7 +112,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     // adduserid
     this.socket.emit('addUser', this.locUserId)
     this.socket.on('getUsers', users => {
-      console.log(users, 'usersockid');
+      // console.log(users, 'usersockid');
     })
 
     this.ps.getSelectedUser().subscribe(user => {
