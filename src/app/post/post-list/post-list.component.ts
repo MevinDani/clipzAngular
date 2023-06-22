@@ -227,12 +227,32 @@ export class PostListComponent implements OnInit {
 
 
   getTimeElapsed(createdAt: string): string {
+    console.log(this.posts);
     const commentDate = new Date(createdAt);
     const now = new Date();
     const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
 
     if (diff < 60) {
       return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      const minutes = Math.floor(diff / 60);
+      return `${minutes} minutes ago`;
+    } else if (diff < 86400) {
+      const hours = Math.floor(diff / 3600);
+      return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(diff / 86400);
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    }
+  }
+
+  getTimeElapsed3(createdAt: string): string {
+    const commentDate = new Date(createdAt);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
+
+    if (diff < 60) {
+      return `just now`;
     } else if (diff < 3600) {
       const minutes = Math.floor(diff / 60);
       return `${minutes} minutes ago`;
@@ -302,19 +322,5 @@ export class PostListComponent implements OnInit {
     // console.log(this.comments);
     this.comments = this.comments.filter((id: any) => id._id !== cmtId)
   }
-
-
-
-  // ngOnDestroy(): void {
-  //   this.postSub.unsubscribe()
-  // }
-
-  // followerCheck() {
-  //   for(let i of this.posts) {
-  //     if(this.locUserId == i.creator) {
-  //       console.log(i.creator,'hit');
-  //     }
-  //   }
-  // }
 
 }
