@@ -38,6 +38,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.selectedUser = null;
     // console.log(this.selectedUser);
     this.ps.setSelectedUser('')
+    this.socket.off('disconnect');
+    this.socket.off('getUsers');
   }
 
   ngOnInit(): void {
@@ -111,7 +113,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     // adduserid
     this.socket.emit('addUser', this.locUserId)
     this.socket.on('getUsers', users => {
-      // console.log(users, 'usersockid');
+      console.log(users, 'usersockid');
     })
 
     this.ps.getSelectedUser().subscribe(user => {
@@ -235,16 +237,16 @@ export class ChatComponent implements OnInit, OnDestroy {
     const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
 
     if (diff < 60) {
-      return `${diff} seconds ago`;
+      return `${diff} seconds`;
     } else if (diff < 3600) {
       const minutes = Math.floor(diff / 60);
-      return `${minutes} minutes ago`;
+      return `${minutes} minutes`;
     } else if (diff < 86400) {
       const hours = Math.floor(diff / 3600);
-      return `${hours} hours ago`;
+      return `${hours} hours`;
     } else {
       const days = Math.floor(diff / 86400);
-      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+      return `${days} ${days === 1 ? 'day' : 'days'}`;
     }
   }
 
