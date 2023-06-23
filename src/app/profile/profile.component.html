@@ -154,7 +154,7 @@
                         placeholder="Add Comments" class="form-control" id="exampleFormControlTextarea1"
                         rows="1"></textarea>
                     <div *ngIf="(this.commentForm.get('comment')?.errors)&&(this.commentForm.get('comment')?.touched)">
-                        <p class="text-danger">Minimum 3 characters required</p>
+                        <p class="text-danger">Minimum 1 character required</p>
                     </div>
                     <button class="btn btn-success mt-2" style="height: 30px;">
                         <p style="font-size: small;">Add Comments</p>

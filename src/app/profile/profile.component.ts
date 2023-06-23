@@ -37,6 +37,8 @@ export class ProfileComponent implements OnInit {
   postCreators: any = []
   postProfPic: any = {}
 
+  commentprofPic: any = {}
+
 
   followStatusChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -58,6 +60,8 @@ export class ProfileComponent implements OnInit {
   locFollowers: any = []
   locFollowings: any = []
   locFreinds: any = []
+
+  locUname: any
 
   showChatButton!: boolean;
 
@@ -85,13 +89,6 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    // if (this.selectChatUserReloodToggle) {
-    //   this.router.events.subscribe(event => {
-    //     if (event instanceof NavigationEnd) {
-    //       window.location.reload();
-    //     }
-    //   });
-    // }
 
     this.ds.getUser(this.userId).subscribe((result: any) => {
       // console.log(result);
@@ -120,6 +117,7 @@ export class ProfileComponent implements OnInit {
       })
 
     this.ds.getUser(this.locUserId).subscribe((result: any) => {
+      this.locUname = result.username
       this.locFollowers = result.followers
       this.locFollowings = result.followings
       this.showChatButton = this.locFollowers.includes(this.userId) && this.locFollowings.includes(this.userId);
@@ -389,7 +387,7 @@ export class ProfileComponent implements OnInit {
   }
 
   commentForm = this.fb.group({
-    comment: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+    comment: ['', [Validators.required, Validators.minLength(1), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
   })
 
   commFormSubmit(id: any) {
@@ -399,13 +397,13 @@ export class ProfileComponent implements OnInit {
     }
     const commPath = this.commentForm.value
     // console.log(id, commPath.comment, this.locUserId, this.userName);
-    this.ps.addComment(id, commPath.comment, this.locUserId, this.userName).subscribe((result: any) => {
+    this.ps.addComment(id, commPath.comment, this.locUserId, this.locUname).subscribe((result: any) => {
       // console.log(result);
       if (result.message == 'Comment added successfully') {
         this.toastr.success('Comment added successfully')
       }
       // const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date() }
-      const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.userName, createdAt: new Date(), _id: result.comment._id }
+      const newComm = { postId: id, content: commPath.comment, userId: this.locUserId, name: this.locUname, createdAt: new Date(), _id: result.comment._id }
       this.comments.push(newComm)
       setTimeout(() => {
         this.scrollToBottom();
@@ -421,13 +419,13 @@ export class ProfileComponent implements OnInit {
     const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
 
     if (diff < 60) {
-      return `${diff} seconds ago`;
+      return `Just now`;
     } else if (diff < 3600) {
       const minutes = Math.floor(diff / 60);
-      return `${minutes} minutes ago`;
+      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
     } else if (diff < 86400) {
       const hours = Math.floor(diff / 3600);
-      return `${hours} hours ago`;
+      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
     } else {
       const days = Math.floor(diff / 86400);
       return `${days} ${days === 1 ? 'day' : 'days'} ago`;
@@ -439,6 +437,15 @@ export class ProfileComponent implements OnInit {
     this.comments = []
     this.ps.getComments(id).subscribe((result: any) => {
       // console.log(result);
+      result.map((obj: any) => {
+        this.ds.getUser(obj.userId).subscribe((result: any) => {
+          // console.log(result);
+          this.commentprofPic[result.username] = result.profilePic
+          this.postProfPic[result.username] = result.profilePic
+          // console.log(this.commentprofPic, this.postProfPic);
+        })
+      })
+
       // console.log(this.postProfPic);
       // this.comments = result
       this.comments = result.map((comment: any) => {
@@ -447,8 +454,8 @@ export class ProfileComponent implements OnInit {
           createdAt: new Date(comment.createdAt)
         };
       })
-      this.isCmtLoading = false
       // console.log(this.comments, 'comm');
+      this.isCmtLoading = false
     })
   }
 
@@ -494,6 +501,7 @@ export class ProfileComponent implements OnInit {
 
   cmntBox(id: any) {
     this.openCmtBox[id] = !this.openCmtBox[id]
+    this.toggleCmtBtn[id] = false
     // console.log(id);
     // console.log(this.openCmtBox);
   }
@@ -509,7 +517,7 @@ export class ProfileComponent implements OnInit {
 
   sendUname(name: any) {
     this.selectChatUserReloodToggle = false
-    console.log(name);
+    // console.log(name);
     this.ps.setSelectedUser(name);
     this.router.navigateByUrl('/chat');
   }

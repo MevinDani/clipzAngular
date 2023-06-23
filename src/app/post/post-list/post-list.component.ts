@@ -179,10 +179,11 @@ export class PostListComponent implements OnInit {
 
   cmntBox(id: any) {
     this.openCmtBox[id] = !this.openCmtBox[id]
+    this.toggleCmtBtn[id] = false
   }
 
   commentForm = this.fb.group({
-    comment: ['', [Validators.required, Validators.minLength(4), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
+    comment: ['', [Validators.required, Validators.minLength(1), Validators.pattern(/^[\w\s!@#$%^&*()\-+=\[\]{}|\\:;"'<>,.?/]*$/)]],
   })
 
   commFormSubmit(id: any) {
@@ -227,7 +228,7 @@ export class PostListComponent implements OnInit {
 
 
   getTimeElapsed(createdAt: string): string {
-    console.log(this.posts);
+    // console.log(this.posts);
     const commentDate = new Date(createdAt);
     const now = new Date();
     const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
@@ -252,13 +253,13 @@ export class PostListComponent implements OnInit {
     const diff = Math.floor((now.getTime() - commentDate.getTime()) / 1000);  // Calculate the time difference in seconds
 
     if (diff < 60) {
-      return `just now`;
+      return `Just now`;
     } else if (diff < 3600) {
       const minutes = Math.floor(diff / 60);
-      return `${minutes} minutes ago`;
+      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
     } else if (diff < 86400) {
       const hours = Math.floor(diff / 3600);
-      return `${hours} hours ago`;
+      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
     } else {
       const days = Math.floor(diff / 86400);
       return `${days} ${days === 1 ? 'day' : 'days'} ago`;
